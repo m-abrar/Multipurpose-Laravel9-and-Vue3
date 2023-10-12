@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\Admin\PropertiesController;
+use App\Http\Controllers\Admin\PropertyTypesController;
 use App\Http\Controllers\Admin\AppointmentStatusController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\DashboardStatController;
@@ -48,6 +50,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/appointments/{appointment}/edit', [AppointmentController::class, 'edit']);
     Route::put('/api/appointments/{appointment}/edit', [AppointmentController::class, 'update']);
     Route::delete('/api/appointments/{appointment}', [AppointmentController::class, 'destroy']);
+
+    Route::get('/api/propertytypes', [PropertyTypesController::class, 'index']);
+    Route::get('/api/propertytypes/withcount', [PropertyTypesController::class, 'getTypesWithCount']);
+    Route::get('/api/properties', [PropertiesController::class, 'index']);
+    Route::post('/api/properties/create', [PropertiesController::class, 'store']);
+    Route::get('/api/properties/{properties}/edit', [PropertiesController::class, 'edit']);
+    Route::put('/api/properties/{properties}/edit', [PropertiesController::class, 'update']);
+    Route::delete('/api/properties/{properties}', [PropertiesController::class, 'destroy']);
 
     Route::get('/api/settings', [SettingController::class, 'index']);
     Route::post('/api/settings', [SettingController::class, 'update']);

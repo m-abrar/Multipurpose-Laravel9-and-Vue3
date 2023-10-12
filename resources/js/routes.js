@@ -1,6 +1,8 @@
 import Dashboard from './components/Dashboard.vue';
 import ListAppointments from './pages/appointments/ListAppointments.vue';
 import AppointmentForm from './pages/appointments/AppointmentForm.vue';
+import ListProperties from './pages/properties/ListProperties.vue';
+import PropertiesForm from './pages/properties/PropertiesForm.vue';
 import UserList from './pages/users/UserList.vue';
 import UpdateSetting from './pages/settings/UpdateSetting.vue';
 import UpdateProfile from './pages/profile/UpdateProfile.vue';
@@ -35,6 +37,24 @@ export default [
         path: '/admin/appointments/:id/edit',
         name: 'admin.appointments.edit',
         component: AppointmentForm,
+    },
+        
+    {
+        path: '/admin/properties',
+        name: 'admin.properties',
+        component: ListProperties,
+    },
+
+    {
+        path: '/admin/properties/create',
+        name: 'admin.properties.create',
+        component: PropertiesForm,
+    },
+
+    {
+        path: '/admin/properties/:id/edit',
+        name: 'admin.properties.edit',
+        component: PropertiesForm,
     },
 
     {
