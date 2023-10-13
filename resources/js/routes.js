@@ -11,6 +11,8 @@ import ListFeatures from './pages/features/ListFeatures.vue';
 import FeaturesForm from './pages/features/FeaturesForm.vue';
 import ListServices from './pages/services/ListServices.vue';
 import ServicesForm from './pages/services/ServicesForm.vue';
+import ListLocations from './pages/locations/ListLocations.vue';
+import LocationsForm from './pages/locations/LocationsForm.vue';
 import ListLineItems from './pages/lineitems/ListLineItems.vue';
 import LineItemsForm from './pages/lineitems/LineItemsForm.vue';
 import UserList from './pages/users/UserList.vue';
@@ -159,6 +161,26 @@ export default [
         path: '/admin/lineitems/:id/edit',
         name: 'admin.lineitems.edit',
         component: LineItemsForm,
+    },
+
+
+    
+    {
+        path: '/admin/locations',
+        name: 'admin.locations',
+        component: ListLocations,
+    },
+    
+    {
+        path: '/admin/locations/create',
+        name: 'admin.locations.create',
+        component: LocationsForm,
+    },
+    
+    {
+        path: '/admin/locations/:id/edit',
+        name: 'admin.locations.edit',
+        component: LocationsForm,
     },
 
     

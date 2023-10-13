@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         // \App\Models\Amenities::factory(10)->create();
         // \App\Models\Features::factory(10)->create();
         // \App\Models\Service::factory(10)->create();
-        \App\Models\LineItem::factory(10)->create();
+        // \App\Models\LineItem::factory(10)->create();
+        \App\Models\Locations::factory(10)->create();
         // \App\Models\Appointment::factory(10)->create();
         // \App\Models\Client::factory(10)->create(); //applied
 

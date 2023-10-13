@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\PropertiesController;
 use App\Http\Controllers\Admin\PropertyTypesController;
 use App\Http\Controllers\Admin\AmenitiesController;
+use App\Http\Controllers\Admin\LocationsController;
 use App\Http\Controllers\Admin\FeaturesController;
 use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\Admin\LineItemsController;
@@ -100,6 +101,15 @@ Route::middleware('auth')->group(function () {
     Route::put('/api/lineitems/{lineitems}/edit', [LineitemsController::class, 'update']);
     Route::delete('/api/lineitems/{lineitems}', [LineitemsController::class, 'destroy']);
     Route::post('/api/lineitems/upload-image', [LineitemsController::class, 'uploadImage']);
+
+    Route::get('/api/locations', [LocationsController::class, 'index']);
+    Route::post('/api/locations/create', [LocationsController::class, 'store']);
+    Route::get('/api/locations/withcount', [LocationsController::class, 'getTypesWithCount']);
+    Route::get('/api/locations/{id}/edit', [LocationsController::class, 'edit']);
+    Route::put('/api/locations/{locations}/edit', [LocationsController::class, 'update']);
+    Route::delete('/api/locations/{locations}', [LocationsController::class, 'destroy']);
+    Route::post('/api/locations/upload-image', [LocationsController::class, 'uploadImage']);
+
 
     Route::get('/api/settings', [SettingController::class, 'index']);
     Route::post('/api/settings', [SettingController::class, 'update']);
