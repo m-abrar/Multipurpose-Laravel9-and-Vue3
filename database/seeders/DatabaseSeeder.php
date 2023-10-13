@@ -14,8 +14,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        \App\Models\Properties::factory(10)->create();
-        
+        // \App\Models\Properties::factory(10)->create();
+        \App\Models\Amenities::factory(10)->create();
         // \App\Models\Appointment::factory(10)->create();
         // \App\Models\Client::factory(10)->create(); //applied
 
@@ -23,5 +23,18 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+
+        $properties = \App\Models\Properties::all();
+        $amenities = \App\Models\Amenities::all();
+
+        // Loop through properties and associate them with random amenities
+        $properties->each(function ($property) use ($amenities) {
+            // Randomly select a subset of amenities to associate with the property
+            $associatedAmenities = $amenities->random(rand(1, 5)); // Associate with 1 to 5 random amenities
+
+            // Sync the property's amenities, replacing existing associations
+            $property->amenities()->sync($associatedAmenities);
+        });
     }
 }

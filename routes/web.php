@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\PropertiesController;
 use App\Http\Controllers\Admin\PropertyTypesController;
+use App\Http\Controllers\Admin\AmenitiesController;
 use App\Http\Controllers\Admin\AppointmentStatusController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\DashboardStatController;
@@ -64,6 +65,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/properties/{properties}/edit', [PropertiesController::class, 'edit']);
     Route::put('/api/properties/{properties}/edit', [PropertiesController::class, 'update']);
     Route::delete('/api/properties/{properties}', [PropertiesController::class, 'destroy']);
+
+    Route::get('/api/amenities', [AmenitiesController::class, 'index']);
+    Route::post('/api/amenities/create', [AmenitiesController::class, 'store']);
+    Route::get('/api/amenities/withcount', [AmenitiesController::class, 'getTypesWithCount']);
+    Route::get('/api/amenities/{propertyType}/edit', [AmenitiesController::class, 'edit']);
+    Route::put('/api/amenities/{propertyType}/edit', [AmenitiesController::class, 'update']);
+    Route::delete('/api/amenities/{propertytype}', [AmenitiesController::class, 'destroy']);
+    Route::post('/api/amenities/upload-image', [AmenitiesController::class, 'uploadImage']);
 
     Route::get('/api/settings', [SettingController::class, 'index']);
     Route::post('/api/settings', [SettingController::class, 'update']);
