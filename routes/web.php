@@ -52,7 +52,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/api/appointments/{appointment}', [AppointmentController::class, 'destroy']);
 
     Route::get('/api/propertytypes', [PropertyTypesController::class, 'index']);
+    Route::post('/api/propertytypes/create', [PropertyTypesController::class, 'store']);
     Route::get('/api/propertytypes/withcount', [PropertyTypesController::class, 'getTypesWithCount']);
+    Route::get('/api/propertytypes/{propertyType}/edit', [PropertyTypesController::class, 'edit']);
+    Route::put('/api/propertytypes/{propertyType}/edit', [PropertyTypesController::class, 'update']);
+    Route::delete('/api/propertytypes/{propertytype}', [PropertyTypesController::class, 'destroy']);
+    Route::post('/api/propertytypes/upload-image', [PropertyTypesController::class, 'uploadImage']);
+
     Route::get('/api/properties', [PropertiesController::class, 'index']);
     Route::post('/api/properties/create', [PropertiesController::class, 'store']);
     Route::get('/api/properties/{properties}/edit', [PropertiesController::class, 'edit']);

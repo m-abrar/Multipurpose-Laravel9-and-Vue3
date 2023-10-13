@@ -3,6 +3,8 @@ import ListAppointments from './pages/appointments/ListAppointments.vue';
 import AppointmentForm from './pages/appointments/AppointmentForm.vue';
 import ListProperties from './pages/properties/ListProperties.vue';
 import PropertiesForm from './pages/properties/PropertiesForm.vue';
+import ListPropertyTypes from './pages/propertytypes/ListPropertyTypes.vue';
+import PropertyTypeForm from './pages/propertytypes/PropertyTypeForm.vue';
 import UserList from './pages/users/UserList.vue';
 import UpdateSetting from './pages/settings/UpdateSetting.vue';
 import UpdateProfile from './pages/profile/UpdateProfile.vue';
@@ -56,6 +58,25 @@ export default [
         name: 'admin.properties.edit',
         component: PropertiesForm,
     },
+
+    {
+        path: '/admin/propertytypes/create',
+        name: 'admin.propertytypes.create',
+        component: PropertyTypeForm,
+    },
+
+    {
+        path: '/admin/propertytypes/:id/edit',
+        name: 'admin.propertytypes.edit',
+        component: PropertyTypeForm,
+    },
+
+    {
+        path: '/admin/propertytypes',
+        name: 'admin.propertytypes',
+        component: ListPropertyTypes,
+    },
+
 
     {
         path: '/admin/users',
