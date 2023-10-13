@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\PropertiesController;
 use App\Http\Controllers\Admin\PropertyTypesController;
 use App\Http\Controllers\Admin\AmenitiesController;
+use App\Http\Controllers\Admin\FeaturesController;
 use App\Http\Controllers\Admin\AppointmentStatusController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\DashboardStatController;
@@ -69,10 +70,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/amenities', [AmenitiesController::class, 'index']);
     Route::post('/api/amenities/create', [AmenitiesController::class, 'store']);
     Route::get('/api/amenities/withcount', [AmenitiesController::class, 'getTypesWithCount']);
-    Route::get('/api/amenities/{propertyType}/edit', [AmenitiesController::class, 'edit']);
-    Route::put('/api/amenities/{propertyType}/edit', [AmenitiesController::class, 'update']);
-    Route::delete('/api/amenities/{propertytype}', [AmenitiesController::class, 'destroy']);
+    Route::get('/api/amenities/{amenities}/edit', [AmenitiesController::class, 'edit']);
+    Route::put('/api/amenities/{amenities}/edit', [AmenitiesController::class, 'update']);
+    Route::delete('/api/amenities/{amenities}', [AmenitiesController::class, 'destroy']);
     Route::post('/api/amenities/upload-image', [AmenitiesController::class, 'uploadImage']);
+
+    Route::get('/api/features', [FeaturesController::class, 'index']);
+    Route::post('/api/features/create', [FeaturesController::class, 'store']);
+    Route::get('/api/features/withcount', [FeaturesController::class, 'getTypesWithCount']);
+    Route::get('/api/features/{id}/edit', [FeaturesController::class, 'edit']);
+    Route::put('/api/features/{features}/edit', [FeaturesController::class, 'update']);
+    Route::delete('/api/features/{features}', [FeaturesController::class, 'destroy']);
+    Route::post('/api/features/upload-image', [FeaturesController::class, 'uploadImage']);
 
     Route::get('/api/settings', [SettingController::class, 'index']);
     Route::post('/api/settings', [SettingController::class, 'update']);

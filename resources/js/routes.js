@@ -7,6 +7,8 @@ import ListPropertyTypes from './pages/propertytypes/ListPropertyTypes.vue';
 import PropertyTypeForm from './pages/propertytypes/PropertyTypeForm.vue';
 import ListAmenities from './pages/amenities/ListAmenities.vue';
 import AmenitiesForm from './pages/amenities/AmenitiesForm.vue';
+import ListFeatures from './pages/features/ListFeatures.vue';
+import FeaturesForm from './pages/features/FeaturesForm.vue';
 import UserList from './pages/users/UserList.vue';
 import UpdateSetting from './pages/settings/UpdateSetting.vue';
 import UpdateProfile from './pages/profile/UpdateProfile.vue';
@@ -96,6 +98,25 @@ export default [
         path: '/admin/amenities/:id/edit',
         name: 'admin.amenities.edit',
         component: AmenitiesForm,
+    },
+
+
+    {
+        path: '/admin/features',
+        name: 'admin.features',
+        component: ListFeatures,
+    },
+
+    {
+        path: '/admin/features/create',
+        name: 'admin.features.create',
+        component: FeaturesForm,
+    },
+
+    {
+        path: '/admin/features/:id/edit',
+        name: 'admin.features.edit',
+        component: FeaturesForm,
     },
 
 
