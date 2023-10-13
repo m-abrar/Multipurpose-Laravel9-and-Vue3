@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Properties;
+use Illuminate\Http\Request;
 
 class PropertiesController extends Controller
 {
@@ -47,10 +48,12 @@ class PropertiesController extends Controller
 
     public function edit(Properties $properties)
     {
+        $properties['associated_amenities'] = $properties->amenities->pluck('id');
+
         return $properties;
     }
 
-    public function update(Properties $properties)
+    public function update(Request $request, Properties $properties)
     {
         $validated = request()->validate([
             'name' => 'required',
@@ -62,8 +65,14 @@ class PropertiesController extends Controller
         ], [
             'property_type_id.required' => 'The property type field is required.',
         ]);
-
         $properties->update($validated);
+
+        // Attach selected amenities to the property
+        // $properties->amenities()->attach($request->input('amenities', []));
+
+        // Use the sync method to update the selected amenities
+        $properties->amenities()->sync($request->input('amenities', []));
+
 
         return response()->json(['success' => true]);
     }

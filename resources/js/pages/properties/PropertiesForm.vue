@@ -12,6 +12,10 @@ const route = useRoute();
 const toastr = useToastr();
 const form = reactive({
     name: '',
+    slug: '',
+    item_code: '',
+    description: '',
+    amenities: '',
     bedrooms: '',
     bathrooms: '',
     price: '',
@@ -56,13 +60,25 @@ const getPropertyTypes = () => {
     })
 };
 
+const selectedAmenities = ref([1,2,3,4,5]);
+const availableAmenities = ref();
+const getAvailableAmenities = () => {
+    axios.get('/api/amenities')
+    .then((response) => {
+        availableAmenities.value = response.data;
+    })
+};
+
 const getProperty = () => {
     axios.get(`/api/properties/${route.params.id}/edit`)
     .then(({ data }) => {
         form.name = data.name;
         form.slug = data.slug;
+        form.item_code = data.item_code;
+        form.description = data.description;
         form.property_type_id = data.property_type_id;
         form.excerpt = data.excerpt;
+        form.amenities = data.associated_amenities;
         // You can continue setting the values for other properties based on your data.
         form.price = data.price;
         form.price_sale = data.price_sale;
@@ -120,6 +136,7 @@ onMounted(() => {
         defaultHour: 10,
     });
     getPropertyTypes();
+    getAvailableAmenities();
 });
 </script>
 
@@ -206,6 +223,31 @@ onMounted(() => {
                                     <textarea v-model="form.description" class="form-control" :class="{ 'is-invalid': errors.description }" id="description" rows="3" placeholder="Enter property description here..."></textarea>
                                     <span class="invalid-feedback">{{ errors.description }}</span>
                                 </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label>Select Amenities:</label>
+                                        <div class="col-lg-12">
+
+                                            <!-- Iterate through available amenities -->
+                                            <div class="checkbox-item col-lg-3 col-md-4 col-sm-6 col-sm-12" v-for="amenity in availableAmenities" :key="amenity.id">
+                                                
+                                                <label class="checkbox-label">
+                                                    <input
+                                                    type="checkbox"
+                                                    
+                                                    v-model="form.amenities"
+                                                    :value="amenity.id"
+                                                    name="amenities[]"
+                                                    />
+                                                    {{ amenity.name }}
+                                                </label>
+                                                
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Continue adding other property fields as needed -->
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </Form>
@@ -216,3 +258,17 @@ onMounted(() => {
         </div>
     </div>
 </template>
+
+<style scoped>
+.checkbox-item {
+  float: left;
+}
+
+.checkbox-label {
+  font-weight: normal !important;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin-right: 8px;
+}
+</style>
