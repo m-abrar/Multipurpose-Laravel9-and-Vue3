@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\PropertiesController;
 use App\Http\Controllers\Admin\PropertyTypesController;
 use App\Http\Controllers\Admin\AmenitiesController;
 use App\Http\Controllers\Admin\FeaturesController;
+use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\Admin\AppointmentStatusController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\DashboardStatController;
@@ -82,6 +83,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/api/features/{features}/edit', [FeaturesController::class, 'update']);
     Route::delete('/api/features/{features}', [FeaturesController::class, 'destroy']);
     Route::post('/api/features/upload-image', [FeaturesController::class, 'uploadImage']);
+
+    Route::get('/api/services', [ServicesController::class, 'index']);
+    Route::post('/api/services/create', [ServicesController::class, 'store']);
+    Route::get('/api/services/withcount', [ServicesController::class, 'getTypesWithCount']);
+    Route::get('/api/services/{id}/edit', [ServicesController::class, 'edit']);
+    Route::put('/api/services/{services}/edit', [ServicesController::class, 'update']);
+    Route::delete('/api/services/{services}', [ServicesController::class, 'destroy']);
+    Route::post('/api/services/upload-image', [ServicesController::class, 'uploadImage']);
 
     Route::get('/api/settings', [SettingController::class, 'index']);
     Route::post('/api/settings', [SettingController::class, 'update']);

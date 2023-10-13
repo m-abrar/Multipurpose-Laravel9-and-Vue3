@@ -11,13 +11,13 @@ class PropertyAmenityTableSeeder extends Seeder
         $properties = Property::all();
         $amenities = Amenity::all();
 
-        // Loop through properties and associate them with random amenities
-        $properties->each(function ($property) use ($amenities) {
-            // Randomly select a subset of amenities to associate with the property
-            $associatedAmenities = $amenities->random(rand(1, 5)); // Associate with 1 to 5 random amenities
+        // // Loop through properties and associate them with random amenities
+        // $properties->each(function ($property) use ($amenities) {
+        //     // Randomly select a subset of amenities to associate with the property
+        //     $associatedAmenities = $amenities->random(rand(1, 5)); // Associate with 1 to 5 random amenities
 
-            // Sync the property's amenities, replacing existing associations
-            $property->amenities()->sync($associatedAmenities);
-        });
+        //     // Sync the property's amenities, replacing existing associations
+        //     $property->amenities()->sync($associatedAmenities);
+        // });
     }
 }

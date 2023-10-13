@@ -9,6 +9,8 @@ import ListAmenities from './pages/amenities/ListAmenities.vue';
 import AmenitiesForm from './pages/amenities/AmenitiesForm.vue';
 import ListFeatures from './pages/features/ListFeatures.vue';
 import FeaturesForm from './pages/features/FeaturesForm.vue';
+import ListServices from './pages/services/ListServices.vue';
+import ServicesForm from './pages/services/ServicesForm.vue';
 import UserList from './pages/users/UserList.vue';
 import UpdateSetting from './pages/settings/UpdateSetting.vue';
 import UpdateProfile from './pages/profile/UpdateProfile.vue';
@@ -120,6 +122,26 @@ export default [
     },
 
 
+    {
+        path: '/admin/services',
+        name: 'admin.services',
+        component: ListServices,
+    },
+    
+    {
+        path: '/admin/services/create',
+        name: 'admin.services.create',
+        component: ServicesForm,
+    },
+    
+    {
+        path: '/admin/services/:id/edit',
+        name: 'admin.services.edit',
+        component: ServicesForm,
+    },
+
+    
+    
     {
         path: '/admin/users',
         name: 'admin.users',
