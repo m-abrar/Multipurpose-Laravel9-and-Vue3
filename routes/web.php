@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PropertyTypesController;
 use App\Http\Controllers\Admin\AmenitiesController;
 use App\Http\Controllers\Admin\FeaturesController;
 use App\Http\Controllers\Admin\ServicesController;
+use App\Http\Controllers\Admin\LineItemsController;
 use App\Http\Controllers\Admin\AppointmentStatusController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\DashboardStatController;
@@ -91,6 +92,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/api/services/{services}/edit', [ServicesController::class, 'update']);
     Route::delete('/api/services/{services}', [ServicesController::class, 'destroy']);
     Route::post('/api/services/upload-image', [ServicesController::class, 'uploadImage']);
+
+    Route::get('/api/lineitems', [LineitemsController::class, 'index']);
+    Route::post('/api/lineitems/create', [LineitemsController::class, 'store']);
+    Route::get('/api/lineitems/withcount', [LineitemsController::class, 'getTypesWithCount']);
+    Route::get('/api/lineitems/{id}/edit', [LineitemsController::class, 'edit']);
+    Route::put('/api/lineitems/{lineitems}/edit', [LineitemsController::class, 'update']);
+    Route::delete('/api/lineitems/{lineitems}', [LineitemsController::class, 'destroy']);
+    Route::post('/api/lineitems/upload-image', [LineitemsController::class, 'uploadImage']);
 
     Route::get('/api/settings', [SettingController::class, 'index']);
     Route::post('/api/settings', [SettingController::class, 'update']);

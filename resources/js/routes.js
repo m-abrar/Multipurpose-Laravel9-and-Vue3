@@ -11,6 +11,8 @@ import ListFeatures from './pages/features/ListFeatures.vue';
 import FeaturesForm from './pages/features/FeaturesForm.vue';
 import ListServices from './pages/services/ListServices.vue';
 import ServicesForm from './pages/services/ServicesForm.vue';
+import ListLineItems from './pages/lineitems/ListLineItems.vue';
+import LineItemsForm from './pages/lineitems/LineItemsForm.vue';
 import UserList from './pages/users/UserList.vue';
 import UpdateSetting from './pages/settings/UpdateSetting.vue';
 import UpdateProfile from './pages/profile/UpdateProfile.vue';
@@ -141,6 +143,24 @@ export default [
     },
 
     
+    {
+        path: '/admin/lineitems',
+        name: 'admin.lineitems',
+        component: ListLineItems,
+    },
+    
+    {
+        path: '/admin/lineitems/create',
+        name: 'admin.lineitems.create',
+        component: LineItemsForm,
+    },
+    
+    {
+        path: '/admin/lineitems/:id/edit',
+        name: 'admin.lineitems.edit',
+        component: LineItemsForm,
+    },
+
     
     {
         path: '/admin/users',

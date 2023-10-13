@@ -88,6 +88,16 @@ const logout = () => {
                     </li>
 
                     <li class="nav-item">
+                        <router-link to="/admin/lineitems"
+                            :class="$route.path.startsWith('/admin/lineitems') ? 'active' : ''" class="nav-link">
+                            <i class="nav-icon fas fa-calendar-alt"></i>
+                            <p>
+                                Line Items
+                            </p>
+                        </router-link>
+                    </li>
+
+                    <li class="nav-item">
                         <router-link to="/admin/services"
                             :class="$route.path.startsWith('/admin/services') ? 'active' : ''" class="nav-link">
                             <i class="nav-icon fas fa-calendar-alt"></i>
