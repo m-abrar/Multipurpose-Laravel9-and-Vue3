@@ -7,6 +7,7 @@ use App\Models\Properties;
 use App\Models\PropertyLineItem;
 use App\Models\PropertyService;
 use App\Models\PropertyNeighbour;
+use App\Models\PropertyRoom;
 use Illuminate\Http\Request;
 
 class PropertiesController extends Controller
@@ -71,7 +72,7 @@ class PropertiesController extends Controller
 
     public function edit(Properties $properties)
     {
-        $properties->load('services')->load('lineitems')->load('neighbours');
+        $properties->load('services')->load('lineitems')->load('neighbours')->load('rooms');
         $properties['associated_amenities'] = $properties->amenities->pluck('id');
         $properties['associated_features'] = $properties->features->pluck('id');
 
@@ -95,7 +96,7 @@ class PropertiesController extends Controller
             'property_type_id.required' => 'The property type field is required.',
         ]);
         // Update the model with all form fields
-        $properties->update($request->except(['amenities','features','lineitems','services','neighbours']));
+        $properties->update($request->except(['amenities','features','lineitems','services','neighbours','rooms']));
 
         // Use the sync method to update the selected amenities
         $properties->amenities()->sync($request->input('amenities', []));
@@ -163,6 +164,25 @@ class PropertiesController extends Controller
             }
         
             $properties->neighbours()->saveMany($neighbours);
+        }
+
+        if (isset($request['rooms'])) {
+            // Delete existing neighbours for the property
+            $properties->rooms()->delete();
+        
+            // Create and associate new rooms
+            $rooms = [];
+            foreach ($request['rooms'] as $room) {
+                $rooms[] = new PropertyRoom([
+                    'name' => $room['name'],
+                    'type' => $room['type'],
+                    'image' => $room['image'],
+                    'description' => $room['description'],
+                    'display_order' => $room['display_order'],
+                ]);
+            }
+        
+            $properties->rooms()->saveMany($rooms);
         }
 
         return response()->json(['success' => true]);

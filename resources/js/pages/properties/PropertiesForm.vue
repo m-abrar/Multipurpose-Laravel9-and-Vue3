@@ -33,6 +33,14 @@ const deleteNeighbourForm = (index) => {
     form.neighbours.splice(index, 1)
 };
 
+const addNewRoomForm = () => {
+    var count = form.rooms.length + 1;
+    form.rooms.push({ name: '', type: '', display_order: count, description: '', icon: '', image: 'placeholder.png' })
+};
+const deleteRoomForm = (index) => {
+    form.rooms.splice(index, 1)
+};
+
 
 const router = useRouter();
 const route = useRoute();
@@ -52,6 +60,7 @@ const form = reactive({
     services: [],
     lineitems: [],
     neighbours: [],
+    rooms: [],
     price_sale: '',
     price_nightly: '',
     price_weekly: '',
@@ -585,7 +594,45 @@ onMounted(() => {
                                     <!-- Tab Pan-->
                                     <div class="tab-pane" id="rooms">
                                         <h3 class="text-center">Rooms / Floors</h3>
-
+                                        <div class="card mb-3" v-for="(room, index) in form.rooms">
+                                            <div class="card-body">
+                                                <span class="float-right" style="cursor:pointer"
+                                                    @click="deleteRoomForm(index)">X</span>
+                                                <h4>Add Room/Floor (index: {{ index + 1 }})</h4>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label>Name:</label>
+                                                            <input type="text" v-model="room.name"
+                                                                class="form-control mb-2" placeholder="Name" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Type:</label><br />
+                                                            <input type="radio" :id="'room' + index" value="room"
+                                                                v-model="room.type">
+                                                            <label :for="'room' + index">Room</label>
+                                                            <input type="radio" :id="'floor' + index" value="floor"
+                                                                v-model="room.type">
+                                                            <label :for="'floor' + index">Floor</label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Order:</label>
+                                                            <input type="number" v-model="room.display_order"
+                                                                class="form-control mb-2" placeholder="#" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <textarea v-model="room.description" class="form-control" cols="30"
+                                                            rows="10" placeholder="Description"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="container text-center">
+                                            <button @click="addNewRoomForm" type="button" class="btn btn-sm btn-info">
+                                                <i class="fa fa-plus"></i> New Room
+                                            </button>
+                                        </div>
                                     </div>
                                     <!-- Tab Pan-->
                                     <div class="tab-pane" id="neighbours">
