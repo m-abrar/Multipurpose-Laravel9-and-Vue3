@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Properties;
 use App\Models\PropertyLineItem;
 use App\Models\PropertyService;
+use App\Models\PropertyNeighbour;
 use Illuminate\Http\Request;
 
 class PropertiesController extends Controller
@@ -70,7 +71,7 @@ class PropertiesController extends Controller
 
     public function edit(Properties $properties)
     {
-        $properties->load('services')->load('lineitems');
+        $properties->load('services')->load('lineitems')->load('neighbours');
         $properties['associated_amenities'] = $properties->amenities->pluck('id');
         $properties['associated_features'] = $properties->features->pluck('id');
 
@@ -94,7 +95,7 @@ class PropertiesController extends Controller
             'property_type_id.required' => 'The property type field is required.',
         ]);
         // Update the model with all form fields
-        $properties->update($request->except(['amenities','features','lineitems','services']));
+        $properties->update($request->except(['amenities','features','lineitems','services','neighbours']));
 
         // Use the sync method to update the selected amenities
         $properties->amenities()->sync($request->input('amenities', []));
@@ -143,6 +144,26 @@ class PropertiesController extends Controller
             $properties->services()->saveMany($services);
         }
         
+
+        if (isset($request['neighbours'])) {
+            // Delete existing neighbours for the property
+            $properties->neighbours()->delete();
+        
+            // Create and associate new neighbours
+            $neighbours = [];
+            foreach ($request['neighbours'] as $neighbour) {
+                $neighbours[] = new PropertyNeighbour([
+                    'name' => $neighbour['name'],
+                    'icon' => $neighbour['icon'],
+                    'image' => $neighbour['image'],
+                    'distance' => $neighbour['distance'],
+                    'description' => $neighbour['description'],
+                    'display_order' => $neighbour['display_order'],
+                ]);
+            }
+        
+            $properties->neighbours()->saveMany($neighbours);
+        }
 
         return response()->json(['success' => true]);
     }

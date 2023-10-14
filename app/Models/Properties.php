@@ -65,4 +65,9 @@ class Properties extends Model
         return $this->hasMany(PropertyService::class, 'property_id');
     }
 
+    public function neighbours()
+    {
+        return $this->hasMany(PropertyNeighbour::class, 'property_id');
+    }
+
 }

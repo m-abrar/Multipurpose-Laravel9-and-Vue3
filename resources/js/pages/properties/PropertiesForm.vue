@@ -18,7 +18,7 @@ const deleteLineItemForm = (index) => {
 
 const addNewServiceForm = () => {
     var count = form.services.length + 1;
-    form.services.push({ title:'', price:'', display_order:count, description:'', image:'placeholder.png' })
+    form.services.push({ title: '', price: '', display_order: count, description: '', image: 'placeholder.png' })
 };
 const deleteServiceForm = (index) => {
     form.services.splice(index, 1)
@@ -26,12 +26,13 @@ const deleteServiceForm = (index) => {
 
 
 const addNewNeighbourForm = () => {
-    var count = this.form.neighbours.length + 1;
-    form.neighbours.push({ name: '', distance: '', display_order:count, description: '', icon: '', image:'placeholder.png' })
-},
+    var count = form.neighbours.length + 1;
+    form.neighbours.push({ name: '', distance: '', display_order: count, description: '', icon: '', image: 'placeholder.png' })
+};
 const deleteNeighbourForm = (index) => {
     form.neighbours.splice(index, 1)
-},
+};
+
 
 const router = useRouter();
 const route = useRoute();
@@ -50,6 +51,7 @@ const form = reactive({
     features: [],
     services: [],
     lineitems: [],
+    neighbours: [],
     price_sale: '',
     price_nightly: '',
     price_weekly: '',
@@ -162,6 +164,8 @@ const getProperty = () => {
             form.features = data.associated_features;
             form.services = data.services;
             form.lineitems = data.lineitems;
+            form.neighbours = data.neighbours;
+            form.rooms = data.rooms;
             form.price = data.price;
             form.price_sale = data.price_sale;
             form.price_nightly = data.price_nightly;
@@ -578,6 +582,7 @@ onMounted(() => {
                                         </div>
                                     </div>
                                     <!-- Tab Pan-->
+                                    <!-- Tab Pan-->
                                     <div class="tab-pane" id="rooms">
                                         <h3 class="text-center">Rooms / Floors</h3>
 
@@ -585,7 +590,36 @@ onMounted(() => {
                                     <!-- Tab Pan-->
                                     <div class="tab-pane" id="neighbours">
                                         <h3 class="text-center">Nearby Places</h3>
-
+                                        <div class="card mb-3" v-for="(neighbour, index) in form.neighbours">
+                                            <div class="card-body">
+                                                <span class="float-right" style="cursor:pointer"
+                                                    @click="deleteNeighbourForm(index)">
+                                                    X
+                                                </span>
+                                                <h4>Add Neighbor (index: {{ index + 1 }})</h4>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label>Name:</label>
+                                                        <input type="text" v-model="neighbour.name"
+                                                            class="form-control mb-2"
+                                                            placeholder="Hospital, School, Beach" />
+                                                        <label>Order:</label>
+                                                        <input type="number" v-model="neighbour.display_order"
+                                                            class="form-control mb-2" placeholder="#" />
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label>Distance:</label>
+                                                        <input type="text" v-model="neighbour.distance"
+                                                            class="form-control mb-2" placeholder="5 miles" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="container text-center">
+                                            <button @click="addNewNeighbourForm" type="button" class="btn btn-sm btn-info">
+                                                <i class="fa fa-plus"></i> New Neighbor
+                                            </button>
+                                        </div>
                                     </div>
                                     <!-- Tab Pan-->
                                     <div class="tab-pane" id="lineitems">
@@ -680,17 +714,17 @@ onMounted(() => {
                                                         <input type="text" v-model="service.name" class="form-control mb-2"
                                                             placeholder="Name" />
                                                         <label>Price $:</label>
-                                                        <input type="number" v-model="service.price" class="form-control mb-2"
-                                                            placeholder="0.00" />
+                                                        <input type="number" v-model="service.price"
+                                                            class="form-control mb-2" placeholder="0.00" />
                                                         <label>Order:</label>
                                                         <input type="number" v-model="service.display_order"
                                                             class="form-control mb-2" placeholder="#" />
                                                     </div>
                                                     <div class="col-6">
-                                                        <textarea v-model="service.description" class="form-control" cols="30"
-                                                            rows="10" placeholder="Description"></textarea>
+                                                        <textarea v-model="service.description" class="form-control"
+                                                            cols="30" rows="10" placeholder="Description"></textarea>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -734,12 +768,12 @@ onMounted(() => {
                                     <div class="tab-pane" id="statistics">
                                         <h3 class="text-center">Statistics</h3>
 
-                                    </div>
-                                    <!-- /.tab-pane -->
                                 </div>
+                                <!-- /.tab-pane -->
+                            </div>
 
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </Form>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </Form>
                     </div>
 
                 </div>
