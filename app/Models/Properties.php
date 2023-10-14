@@ -50,4 +50,9 @@ class Properties extends Model
         return $this->belongsToMany(Amenities::class, 'property_amenity_pivot', 'property_id', 'amenity_id');
     }
 
+    public function features()
+    {
+        return $this->belongsToMany(Features::class, 'property_feature_pivot', 'property_id', 'feature_id');
+    }
+
 }

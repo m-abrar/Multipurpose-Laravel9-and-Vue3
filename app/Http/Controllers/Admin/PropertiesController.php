@@ -49,33 +49,38 @@ class PropertiesController extends Controller
     public function edit(Properties $properties)
     {
         $properties['associated_amenities'] = $properties->amenities->pluck('id');
+        $properties['associated_features'] = $properties->features->pluck('id');
 
         return $properties;
     }
 
     public function update(Request $request, Properties $properties)
     {
-        $validated = request()->validate([
+        // Define validation rules for specific fields
+        $validationRules = [
             'name' => 'required',
             'item_code' => 'required',
             'slug' => 'required',
             'property_type_id' => 'required',
             'excerpt' => 'required',
             'description' => 'required',
-        ], [
+        ];
+
+        // Validate the specific fields
+        $request->validate($validationRules, [
             'property_type_id.required' => 'The property type field is required.',
         ]);
-        $properties->update($validated);
-
-        // Attach selected amenities to the property
-        // $properties->amenities()->attach($request->input('amenities', []));
+        // Update the model with all form fields
+        $properties->update($request->except(['amenities','features']));
 
         // Use the sync method to update the selected amenities
         $properties->amenities()->sync($request->input('amenities', []));
-
+        // Use the sync method to update the selected features
+        $properties->features()->sync($request->input('features', []));
 
         return response()->json(['success' => true]);
     }
+
 
     public function destroy(Properties $properties)
     {
