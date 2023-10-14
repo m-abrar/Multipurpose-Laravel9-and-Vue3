@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('value_type', 25)->nullable();
             $table->string('apply_on', 25)->nullable();
             $table->boolean('is_required')->nullable();
-            $table->integer('diplay_order')->nullable();
+            $table->integer('display_order')->nullable();
             $table->timestamps(0);
         });
     }
