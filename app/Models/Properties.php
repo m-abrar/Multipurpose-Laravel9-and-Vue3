@@ -55,4 +55,9 @@ class Properties extends Model
         return $this->belongsToMany(Features::class, 'property_feature_pivot', 'property_id', 'feature_id');
     }
 
+    public function lineitems()
+    {
+        return $this->hasMany(PropertyLineItem::class, 'property_id');
+    }
+
 }

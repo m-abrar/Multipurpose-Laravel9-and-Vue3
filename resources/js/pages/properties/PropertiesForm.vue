@@ -7,6 +7,14 @@ import { Form } from 'vee-validate';
 import flatpickr from "flatpickr";
 import 'flatpickr/dist/themes/light.css';
 
+const addNewLineItemForm = () => {
+    var count = form.lineitems.length + 1;
+    form.lineitems.push({ title: '', value: '', value_type: 'fixed', apply_on: '', is_required: '', order: count, image: 'placeholder.png' })
+};
+const deleteLineItemForm = (index) => {
+    form.lineitems.splice(index, 1)
+};
+
 const router = useRouter();
 const route = useRoute();
 const toastr = useToastr();
@@ -22,6 +30,7 @@ const form = reactive({
     property_type_id: '',
     excerpt: '',
     features: [],
+    lineitems: [],
     price_sale: '',
     price_nightly: '',
     price_weekly: '',
@@ -132,6 +141,7 @@ const getProperty = () => {
             form.excerpt = data.excerpt;
             form.amenities = data.associated_amenities;
             form.features = data.associated_features;
+            form.lineitems = data.lineitems;
             form.price = data.price;
             form.price_sale = data.price_sale;
             form.price_nightly = data.price_nightly;
@@ -558,14 +568,85 @@ onMounted(() => {
 
                                     </div>
                                     <!-- Tab Pan-->
-                                    <div class="tab-pane" id="services">
-                                        <h3 class="text-center">Services</h3>
-
-
-                                    </div>
-                                    <!-- Tab Pan-->
                                     <div class="tab-pane" id="lineitems">
                                         <h3 class="text-center">Line Items</h3>
+                                        <div class="card mb-3" v-for="(lineitem, index) in form.lineitems">
+                                            <div class="card-body">
+                                                <span class="float-right" style="cursor:pointer"
+                                                    @click="deleteLineItemForm(index)">
+                                                    X
+                                                </span>
+                                                <h4>Add Line Item #{{ index + 1 }}</h4>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label>Name:</label>
+                                                            <input type="text" v-model="lineitem.name"
+                                                                class="form-control mb-2" placeholder="Name" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label
+                                                                :for="'lineitem_is_required' + index">Required</label><br />
+                                                            <input type="checkbox" v-model="lineitem.is_required"
+                                                                :id="'lineitem_is_required' + index" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Order:</label>
+                                                            <input type="number" v-model="lineitem.display_order"
+                                                                class="form-control mb-2" placeholder="#" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label v-if="lineitem.value_type == 'percentage'">Value:
+                                                            </label>
+                                                            <label v-else>Price: </label>
+                                                            <div class="input-group">
+                                                                <div v-if="lineitem.value_type == 'fixed'"
+                                                                    class="input-group-prepend">
+                                                                    <span class="input-group-text">$</span>
+                                                                </div>
+                                                                <input type="number" v-model="lineitem.value"
+                                                                    class="form-control" placeholder="0.00" />
+                                                                <div v-if="lineitem.value_type == 'percentage'"
+                                                                    class="input-group-append">
+                                                                    <span class="input-group-text">%</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Type:</label><br />
+                                                            <input type="radio" :id="'fixed' + index" value="fixed"
+                                                                v-model="lineitem.value_type">
+                                                            <label :for="'fixed' + index">Fixed Price</label>
+                                                            <input type="radio" :id="'percent' + index" value="percentage"
+                                                                v-model="lineitem.value_type">
+                                                            <label :for="'percent' + index">Percentage</label>
+                                                        </div>
+                                                        <div class="form-group"
+                                                            v-if="lineitem.value_type == 'percentage' && lineitem.order > 1">
+                                                            <label>Apply To:</label><br />
+                                                            <input type="radio" :id="'base' + index" value="base"
+                                                                v-model="lineitem.apply_on">
+                                                            <label :for="'base' + index">Lodging Amount Only</label>
+                                                            <input type="radio" :id="'sum' + index" value="sum"
+                                                                v-model="lineitem.apply_on">
+                                                            <label :for="'sum' + index">Sum of Line Items</label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="container text-center">
+                                            <button @click="addNewLineItemForm" type="button" class="btn btn-sm btn-info">
+                                                <i class="fa fa-plus"></i> New LineItem
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- Tab Pan-->
+                                    <div class="tab-pane" id="services">
+                                        <h3 class="text-center">Services</h3>
 
                                     </div>
                                     <!-- Tab Pan-->

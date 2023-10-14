@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Properties;
+use App\Models\PropertyLineItem;
 use Illuminate\Http\Request;
 
 class PropertiesController extends Controller
@@ -19,35 +20,56 @@ class PropertiesController extends Controller
             ->paginate();
     }
 
-    public function store()
+    public function store(Request $request, Properties $properties)
     {
-        $validated = request()->validate([
+        // Define validation rules for specific fields
+        $validationRules = [
             'name' => 'required',
             'item_code' => 'required',
             'slug' => 'required',
             'property_type_id' => 'required',
             'excerpt' => 'required',
             'description' => 'required',
-        ], [
-            'client_id.required' => 'The client name field is required.',
-        ]);
+        ];
 
-        Properties::create([
-            'name' => $validated['name'],
-            'item_code' => $validated['item_code'],
-            'slug' => $validated['slug'],
-            'property_type_id' => $validated['property_type_id'],
-            'excerpt' => $validated['excerpt'],
-            'description' => $validated['description'],
-        ], [
+        // Validate the specific fields
+        $request->validate($validationRules, [
             'property_type_id.required' => 'The property type field is required.',
         ]);
+        // Update the model with all form fields
+        $properties->create($request->except(['amenities','features','lineitems']));
+
+        // Use the sync method to update the selected amenities
+        $properties->amenities()->sync($request->input('amenities', []));
+        // Use the sync method to update the selected features
+        $properties->features()->sync($request->input('features', []));
+
+
+        // Handle lineitems if provided
+        if (isset($request['lineitems'])) {
+            // Create and associate line items
+            $lineItems = [];
+            foreach ($request['lineitems'] as $lineitem) {
+                $lineItems[] = new PropertyLineItem([
+                    'name' => $lineitem['name'],
+                    'value' => $lineitem['value'],
+                    'value_type' => $lineitem['value_type'],
+                    'apply_on' => $lineitem['apply_on'],
+                    'is_required' => $lineitem['is_required'],
+                    'image' => $lineitem['image'],
+                    'display_order' => $lineitem['display_order'],
+                ]);
+            }
+
+            $property->lineitems()->saveMany($lineItems);
+        }
 
         return response()->json(['message' => 'success']);
     }
 
     public function edit(Properties $properties)
     {
+        $properties->load('lineitems');
         $properties['associated_amenities'] = $properties->amenities->pluck('id');
         $properties['associated_features'] = $properties->features->pluck('id');
 
@@ -71,12 +93,33 @@ class PropertiesController extends Controller
             'property_type_id.required' => 'The property type field is required.',
         ]);
         // Update the model with all form fields
-        $properties->update($request->except(['amenities','features']));
+        $properties->update($request->except(['amenities','features','lineitems']));
 
         // Use the sync method to update the selected amenities
         $properties->amenities()->sync($request->input('amenities', []));
         // Use the sync method to update the selected features
         $properties->features()->sync($request->input('features', []));
+
+        if (isset($request['lineitems'])) {
+            // Delete existing line items for the property
+            $properties->lineitems()->delete();
+        
+            // Create and associate new line items
+            $lineItems = [];
+            foreach ($request['lineitems'] as $lineitem) {
+                $lineItems[] = new PropertyLineItem([
+                    'name' => $lineitem['name'],
+                    'value' => $lineitem['value'],
+                    'value_type' => $lineitem['value_type'],
+                    'apply_on' => $lineitem['apply_on'],
+                    'is_required' => $lineitem['is_required'],
+                    'image' => $lineitem['image'],
+                    'display_order' => $lineitem['display_order'],
+                ]);
+            }
+        
+            $properties->lineitems()->saveMany($lineItems);
+        }
 
         return response()->json(['success' => true]);
     }
