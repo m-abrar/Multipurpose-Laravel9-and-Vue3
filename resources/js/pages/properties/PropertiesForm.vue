@@ -15,6 +15,13 @@ const deleteLineItemForm = (index) => {
     form.lineitems.splice(index, 1)
 };
 
+const addNewPriceForm = () => {
+    var count = form.prices.length + 1;
+    form.prices.push({ name: '', price: '', display_order: count, date_start: '', date_end: '', image: 'placeholder.png' })
+};
+const deletePriceForm = (index) => {
+    form.prices.splice(index, 1)
+};
 
 const addNewServiceForm = () => {
     var count = form.services.length + 1;
@@ -61,6 +68,7 @@ const form = reactive({
     lineitems: [],
     neighbours: [],
     rooms: [],
+    prices: [],
     price_sale: '',
     price_nightly: '',
     price_weekly: '',
@@ -175,6 +183,7 @@ const getProperty = () => {
             form.lineitems = data.lineitems;
             form.neighbours = data.neighbours;
             form.rooms = data.rooms;
+            form.prices = data.prices;
             form.price = data.price;
             form.price_sale = data.price_sale;
             form.price_nightly = data.price_nightly;
@@ -591,7 +600,6 @@ onMounted(() => {
                                         </div>
                                     </div>
                                     <!-- Tab Pan-->
-                                    <!-- Tab Pan-->
                                     <div class="tab-pane" id="rooms">
                                         <h3 class="text-center">Rooms / Floors</h3>
                                         <div class="card mb-3" v-for="(room, index) in form.rooms">
@@ -603,8 +611,8 @@ onMounted(() => {
                                                     <div class="col-6">
                                                         <div class="form-group">
                                                             <label>Name:</label>
-                                                            <input type="text" v-model="room.name"
-                                                                class="form-control mb-2" placeholder="Name" />
+                                                            <input type="text" v-model="room.name" class="form-control mb-2"
+                                                                placeholder="Name" />
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Type:</label><br />
@@ -784,7 +792,63 @@ onMounted(() => {
                                     <!-- Tab Pan-->
                                     <div class="tab-pane" id="prices">
                                         <h3 class="text-center">Regular Prices</h3>
+                                        <div class="form-group">
+                                            <label>Price Nightly: $</label>
+                                            <input v-model="form.price_nightly" type="number" name="price_nightly"
+                                                placeholder="000.00" class="form-control"
+                                                :class="{ 'is-invalid': errors.price_nightly }">
+                                            <span class="invalid-feedback">{{ errors.price_nightly }}</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Price Monthly: $</label>
+                                            <input v-model="form.price_monthly" type="number" placeholder="000.00"
+                                                class="form-control" :class="{ 'is-invalid': errors.price_monthly }">
+                                            <span class="invalid-feedback">{{ errors.price_monthly }}</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Price Sale: $</label>
+                                            <input v-model="form.price_sale" type="number" name="price_sale"
+                                                placeholder="0000000.00" class="form-control"
+                                                :class="{ 'is-invalid': errors.price_sale }">
+                                            <span class="invalid-feedback">{{ errors.price_sale }}</span>
+                                        </div>
+                                        <h3 class="text-center">Season Prices</h3>
+                                        <div class="card mb-3" v-for="(price, index) in form.prices">
+                                            <div class="card-body">
+                                                <span class="float-right" style="cursor:pointer"
+                                                    @click="deletePriceForm(index)">
+                                                    X
+                                                </span>
+                                                <h4>Add price (index: {{ index + 1 }})</h4>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label>Season Name:</label>
+                                                        <input type="text" v-model="price.name" class="form-control mb-2"
+                                                            placeholder="Summer, Winter, Christmas" />
+                                                        <label>Price $:</label>
+                                                        <input type="number" v-model="price.price" class="form-control mb-2"
+                                                            placeholder="0.00" />
+                                                        <label>Order:</label>
+                                                        <input type="number" v-model="price.display_order"
+                                                            class="form-control mb-2" placeholder="#" />
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label>Date Start:</label>
+                                                        <input type="date" v-model="price.date_start"
+                                                            class="form-control mb-2" placeholder="yyyy-mm-dd" />
+                                                        <label>Date End:</label>
+                                                        <input type="date" v-model="price.date_end"
+                                                            class="form-control mb-2" placeholder="yyyy-mm-dd" />
+                                                    </div>
 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="container text-center">
+                                            <button @click="addNewPriceForm" type="button" class="btn btn-sm btn-info">
+                                                <i class="fa fa-plus"></i> New Price
+                                            </button>
+                                        </div>
                                     </div>
                                     <!-- Tab Pan-->
                                     <div class="tab-pane" id="calendar">
@@ -815,21 +879,23 @@ onMounted(() => {
                                     <div class="tab-pane" id="statistics">
                                         <h3 class="text-center">Statistics</h3>
 
+                                    </div>
+                                    <!-- /.tab-pane -->
                                 </div>
-                                <!-- /.tab-pane -->
-                            </div>
 
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </Form>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </Form>
+                        </div>
+
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-</div></template>
+</template>
 
-<style scoped>.checkbox-item {
+<style scoped>
+.checkbox-item {
     float: left;
 }
 
@@ -839,4 +905,5 @@ onMounted(() => {
 
 .checkbox-label input[type="checkbox"] {
     margin-right: 8px;
-}</style>
+}
+</style>

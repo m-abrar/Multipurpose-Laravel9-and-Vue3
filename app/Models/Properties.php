@@ -75,4 +75,9 @@ class Properties extends Model
         return $this->hasMany(PropertyRoom::class, 'property_id');
     }
 
+    public function prices()
+    {
+        return $this->hasMany(PropertyPrice::class, 'property_id');
+    }
+
 }

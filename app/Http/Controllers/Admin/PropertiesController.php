@@ -8,6 +8,7 @@ use App\Models\PropertyLineItem;
 use App\Models\PropertyService;
 use App\Models\PropertyNeighbour;
 use App\Models\PropertyRoom;
+use App\Models\PropertyPrice;
 use Illuminate\Http\Request;
 
 class PropertiesController extends Controller
@@ -72,7 +73,7 @@ class PropertiesController extends Controller
 
     public function edit(Properties $properties)
     {
-        $properties->load('services')->load('lineitems')->load('neighbours')->load('rooms');
+        $properties->load('services')->load('lineitems')->load('neighbours')->load('rooms')->load('prices');
         $properties['associated_amenities'] = $properties->amenities->pluck('id');
         $properties['associated_features'] = $properties->features->pluck('id');
 
@@ -96,7 +97,7 @@ class PropertiesController extends Controller
             'property_type_id.required' => 'The property type field is required.',
         ]);
         // Update the model with all form fields
-        $properties->update($request->except(['amenities','features','lineitems','services','neighbours','rooms']));
+        $properties->update($request->except(['amenities','features','lineitems','services','neighbours','rooms','prices']));
 
         // Use the sync method to update the selected amenities
         $properties->amenities()->sync($request->input('amenities', []));
@@ -116,7 +117,7 @@ class PropertiesController extends Controller
                     'value_type' => $lineitem['value_type'],
                     'apply_on' => $lineitem['apply_on'],
                     'is_required' => $lineitem['is_required'],
-                    'image' => $lineitem['image'],
+                    // 'image' => $lineitem['image'],
                     'display_order' => $lineitem['display_order'],
                 ]);
             }
@@ -135,7 +136,7 @@ class PropertiesController extends Controller
                 $services[] = new PropertyService([
                     'name' => $service['name'],
                     // 'icon' => $service['icon'],
-                    'image' => $service['image'],
+                    // 'image' => $service['image'],
                     'price' => $service['price'],
                     'description' => $service['description'],
                     'display_order' => $service['display_order'],
@@ -155,8 +156,8 @@ class PropertiesController extends Controller
             foreach ($request['neighbours'] as $neighbour) {
                 $neighbours[] = new PropertyNeighbour([
                     'name' => $neighbour['name'],
-                    'icon' => $neighbour['icon'],
-                    'image' => $neighbour['image'],
+                    // 'icon' => $neighbour['icon'],
+                    // 'image' => $neighbour['image'],
                     'distance' => $neighbour['distance'],
                     'description' => $neighbour['description'],
                     'display_order' => $neighbour['display_order'],
@@ -176,13 +177,34 @@ class PropertiesController extends Controller
                 $rooms[] = new PropertyRoom([
                     'name' => $room['name'],
                     'type' => $room['type'],
-                    'image' => $room['image'],
+                    // 'image' => $room['image'],
                     'description' => $room['description'],
                     'display_order' => $room['display_order'],
                 ]);
             }
         
             $properties->rooms()->saveMany($rooms);
+        }
+
+
+        if (isset($request['prices'])) {
+            $properties->prices()->delete();
+            
+            $prices = [];
+            
+            foreach ($request['prices'] as $price) {
+                $prices[] = new PropertyPrice([
+                    'name' => $price['name'],
+                    'date_start' => $price['date_start'],
+                    'date_end' => $price['date_end'],
+                    // 'icon' => $price['icon'],
+                    'image' => $price['image'],
+                    'price' => $price['price'],
+                    'display_order' => $price['display_order'],
+                ]);
+            }
+        
+            $properties->prices()->saveMany($prices);
         }
 
         return response()->json(['success' => true]);
