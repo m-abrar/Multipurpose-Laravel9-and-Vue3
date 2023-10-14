@@ -60,4 +60,9 @@ class Properties extends Model
         return $this->hasMany(PropertyLineItem::class, 'property_id');
     }
 
+    public function services()
+    {
+        return $this->hasMany(PropertyService::class, 'property_id');
+    }
+
 }

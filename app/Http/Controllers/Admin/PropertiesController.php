@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Properties;
 use App\Models\PropertyLineItem;
+use App\Models\PropertyService;
 use Illuminate\Http\Request;
 
 class PropertiesController extends Controller
@@ -69,7 +70,7 @@ class PropertiesController extends Controller
 
     public function edit(Properties $properties)
     {
-        $properties->load('lineitems');
+        $properties->load('services')->load('lineitems');
         $properties['associated_amenities'] = $properties->amenities->pluck('id');
         $properties['associated_features'] = $properties->features->pluck('id');
 
@@ -93,7 +94,7 @@ class PropertiesController extends Controller
             'property_type_id.required' => 'The property type field is required.',
         ]);
         // Update the model with all form fields
-        $properties->update($request->except(['amenities','features','lineitems']));
+        $properties->update($request->except(['amenities','features','lineitems','services']));
 
         // Use the sync method to update the selected amenities
         $properties->amenities()->sync($request->input('amenities', []));
@@ -120,6 +121,28 @@ class PropertiesController extends Controller
         
             $properties->lineitems()->saveMany($lineItems);
         }
+
+
+        if (isset($request['services'])) {
+            // Delete existing services for the property
+            $properties->services()->delete();
+        
+            // Create and associate new services
+            $services = [];
+            foreach ($request['services'] as $service) {
+                $services[] = new PropertyService([
+                    'name' => $service['name'],
+                    // 'icon' => $service['icon'],
+                    'image' => $service['image'],
+                    'price' => $service['price'],
+                    'description' => $service['description'],
+                    'display_order' => $service['display_order'],
+                ]);
+            }
+        
+            $properties->services()->saveMany($services);
+        }
+        
 
         return response()->json(['success' => true]);
     }

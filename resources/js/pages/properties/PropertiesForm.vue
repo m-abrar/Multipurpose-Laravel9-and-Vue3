@@ -15,6 +15,24 @@ const deleteLineItemForm = (index) => {
     form.lineitems.splice(index, 1)
 };
 
+
+const addNewServiceForm = () => {
+    var count = form.services.length + 1;
+    form.services.push({ title:'', price:'', display_order:count, description:'', image:'placeholder.png' })
+};
+const deleteServiceForm = (index) => {
+    form.services.splice(index, 1)
+};
+
+
+const addNewNeighbourForm = () => {
+    var count = this.form.neighbours.length + 1;
+    form.neighbours.push({ name: '', distance: '', display_order:count, description: '', icon: '', image:'placeholder.png' })
+},
+const deleteNeighbourForm = (index) => {
+    form.neighbours.splice(index, 1)
+},
+
 const router = useRouter();
 const route = useRoute();
 const toastr = useToastr();
@@ -30,6 +48,7 @@ const form = reactive({
     property_type_id: '',
     excerpt: '',
     features: [],
+    services: [],
     lineitems: [],
     price_sale: '',
     price_nightly: '',
@@ -141,6 +160,7 @@ const getProperty = () => {
             form.excerpt = data.excerpt;
             form.amenities = data.associated_amenities;
             form.features = data.associated_features;
+            form.services = data.services;
             form.lineitems = data.lineitems;
             form.price = data.price;
             form.price_sale = data.price_sale;
@@ -647,7 +667,38 @@ onMounted(() => {
                                     <!-- Tab Pan-->
                                     <div class="tab-pane" id="services">
                                         <h3 class="text-center">Services</h3>
-
+                                        <div class="card mb-3" v-for="(service, index) in form.services">
+                                            <div class="card-body">
+                                                <span class="float-right" style="cursor:pointer"
+                                                    @click="deleteServiceForm(index)">
+                                                    X
+                                                </span>
+                                                <h4>Add Service (index: {{ index + 1 }})</h4>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label>Name:</label>
+                                                        <input type="text" v-model="service.name" class="form-control mb-2"
+                                                            placeholder="Name" />
+                                                        <label>Price $:</label>
+                                                        <input type="number" v-model="service.price" class="form-control mb-2"
+                                                            placeholder="0.00" />
+                                                        <label>Order:</label>
+                                                        <input type="number" v-model="service.display_order"
+                                                            class="form-control mb-2" placeholder="#" />
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <textarea v-model="service.description" class="form-control" cols="30"
+                                                            rows="10" placeholder="Description"></textarea>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="container text-center">
+                                            <button @click="addNewServiceForm" type="button" class="btn btn-sm btn-info">
+                                                <i class="fa fa-plus"></i> New Service
+                                            </button>
+                                        </div>
                                     </div>
                                     <!-- Tab Pan-->
                                     <div class="tab-pane" id="prices">
@@ -689,17 +740,15 @@ onMounted(() => {
 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </Form>
-                        </div>
-
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
-</template>
+</div></template>
 
-<style scoped>
-.checkbox-item {
+<style scoped>.checkbox-item {
     float: left;
 }
 
