@@ -69,6 +69,7 @@ const form = reactive({
     neighbours: [],
     rooms: [],
     prices: [],
+    bookings: [],
     price_sale: '',
     price_nightly: '',
     price_weekly: '',
@@ -184,6 +185,7 @@ const getProperty = () => {
             form.lineitems = data.lineitems;
             form.neighbours = data.neighbours;
             form.rooms = data.rooms;
+            form.bookings = data.bookings;
             form.prices = data.prices;
             form.price = data.price;
             form.price_sale = data.price_sale;
@@ -309,8 +311,8 @@ onMounted(() => {
                                     </li>
                                     <li class="nav-item"><a class="nav-link" href="#management"
                                             data-toggle="tab">Management</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#reservations"
-                                            data-toggle="tab">Reservations</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#bookings"
+                                            data-toggle="tab">Bookings</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#reports" data-toggle="tab">Reports</a>
                                     </li>
                                     <li class="nav-item"><a class="nav-link" href="#statistics"
@@ -887,9 +889,23 @@ onMounted(() => {
                                         </div>
                                     </div>
                                     <!-- Tab Pan-->
-                                    <div class="tab-pane" id="reservations">
-                                        <h3 class="text-center">Reservations</h3>
 
+                                    <div class="tab-pane" id="bookings">
+                                        <h3 class="text-center">Bookings</h3>
+                                        <table width="100%">
+                                            <thead>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>From Date</th>
+                                                <th>To Date</th>
+                                            </thead>
+                                            <tr v-for="booking in form.bookings">
+                                                <td>{{booking.id}}</td>
+                                                <td>{{booking.firstname}} {{booking.lastname}}</td>
+                                                <td>{{booking.date_start}}</td>
+                                                <td>{{booking.date_end}}</td>
+                                            </tr>
+                                        </table>
                                     </div>
                                     <!-- Tab Pan-->
                                     <div class="tab-pane" id="reports">

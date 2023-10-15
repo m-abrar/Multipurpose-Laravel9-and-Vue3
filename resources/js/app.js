@@ -8,6 +8,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Routes from './routes.js';
 import Login from './pages/auth/Login.vue';
 import App from './App.vue';
+import moment from 'moment';
+
 import { useAuthUserStore } from './stores/AuthUserStore';
 import { useSettingStore } from './stores/SettingStore';
 
@@ -41,5 +43,22 @@ app.use(router);
 // } else {
 //     app.mount('#app');
 // }
+
+
+
+// Define custom filters
+app.config.globalProperties.$filters = {
+    myDate(value) {
+      return moment(value).format('MMMM Do YYYY');
+    },
+    myDate2(value) {
+      return moment(value).format('D MMM, Y');
+    },
+
+    upText(value) {
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    },
+  };
+
 
 app.mount('#app');

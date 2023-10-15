@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\PropertiesController;
+use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\PropertyTypesController;
 use App\Http\Controllers\Admin\AmenitiesController;
 use App\Http\Controllers\Admin\LocationsController;
@@ -118,6 +119,16 @@ Route::middleware('auth')->group(function () {
     Route::put('/api/profile', [ProfileController::class, 'update']);
     Route::post('/api/upload-profile-image', [ProfileController::class, 'uploadImage']);
     Route::post('/api/change-user-password', [ProfileController::class, 'changePassword']);
+
+
+
+    Route::get('/api/bookings', [BookingController::class, 'index']);
+    Route::post('/api/booking/create', [BookingController::class, 'store']);
+    Route::get('/api/booking/{booking}/edit', [BookingController::class, 'edit']);
+    Route::put('/api/booking/{booking}/edit', [BookingController::class, 'update']);
+    Route::delete('/api/booking/{booking}', [BookingController::class, 'destroy']);
+
+
 });
 
 Route::get('{view}', ApplicationController::class)->where('view', '(.*)')->middleware('auth');

@@ -73,7 +73,7 @@ class PropertiesController extends Controller
 
     public function edit(Properties $properties)
     {
-        $properties->load('services')->load('lineitems')->load('neighbours')->load('rooms')->load('prices');
+        $properties->load('services')->load('lineitems')->load('neighbours')->load('rooms')->load('prices')->load('bookings');
         $properties['associated_amenities'] = $properties->amenities->pluck('id');
         $properties['associated_features'] = $properties->features->pluck('id');
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Properties extends Model
+class Booking extends Model
 {
     use HasFactory;
 
@@ -40,49 +40,24 @@ class Properties extends Model
         );
     }
 
-    public function type()
-    {
-        return $this->belongsTo(PropertyTypes::class, 'property_type_id');
-    }
-
-    public function amenities()
-    {
-        return $this->belongsToMany(Amenities::class, 'property_amenity_pivot', 'property_id', 'amenity_id');
-    }
-
-    public function features()
-    {
-        return $this->belongsToMany(Features::class, 'property_feature_pivot', 'property_id', 'feature_id');
-    }
-
     public function lineitems()
     {
-        return $this->hasMany(PropertyLineItem::class, 'property_id');
+        return $this->hasMany(BookingLineItem::class);
     }
 
     public function services()
     {
-        return $this->hasMany(PropertyService::class, 'property_id');
+        return $this->hasMany(BookingService::class);
     }
 
-    public function neighbours()
+    public function payments()
     {
-        return $this->hasMany(PropertyNeighbour::class, 'property_id');
+        return $this->hasMany(BookingPayment::class);
     }
 
-    public function rooms()
+    public function property()
     {
-        return $this->hasMany(PropertyRoom::class, 'property_id');
-    }
-
-    public function prices()
-    {
-        return $this->hasMany(PropertyPrice::class, 'property_id');
-    }
-
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class, 'property_id');
+        return $this->belongsTo(Properties::class, 'property_id');
     }
 
 }

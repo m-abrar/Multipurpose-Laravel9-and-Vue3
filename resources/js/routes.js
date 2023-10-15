@@ -1,6 +1,8 @@
 import Dashboard from './components/Dashboard.vue';
 import ListAppointments from './pages/appointments/ListAppointments.vue';
 import AppointmentForm from './pages/appointments/AppointmentForm.vue';
+import ListBookings from './pages/bookings/ListBookings.vue';
+import BookingForm from './pages/bookings/BookingForm.vue';
 import ListProperties from './pages/properties/ListProperties.vue';
 import PropertiesForm from './pages/properties/PropertiesForm.vue';
 import ListPropertyTypes from './pages/propertytypes/ListPropertyTypes.vue';
@@ -51,6 +53,28 @@ export default [
         component: AppointmentForm,
     },
         
+
+    
+    {
+        path: '/admin/bookings',
+        name: 'admin.bookings',
+        component: ListBookings,
+    },
+
+    {
+        path: '/admin/booking/create',
+        name: 'admin.booking.create',
+        component: BookingForm,
+    },
+
+    {
+        path: '/admin/booking/:id/edit',
+        name: 'admin.booking.edit',
+        component: BookingForm,
+    },
+        
+
+
     {
         path: '/admin/properties',
         name: 'admin.properties',
