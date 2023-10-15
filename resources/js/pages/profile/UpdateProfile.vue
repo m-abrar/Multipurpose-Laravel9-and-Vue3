@@ -13,14 +13,14 @@ const updateProfile = () => {
         email: authUserStore.user.email,
         role: authUserStore.user.role,
     })
-    .then((response) => {
-        toastr.success('Profile updated successfully!');
-    })
-    .catch((error) => {
-        if (error.response && error.response.status === 422) {
-            errors.value = error.response.data.errors;
-        }
-    });
+        .then((response) => {
+            toastr.success('Profile updated successfully!');
+        })
+        .catch((error) => {
+            if (error.response && error.response.status === 422) {
+                errors.value = error.response.data.errors;
+            }
+        });
 };
 
 const changePasswordForm = reactive({
@@ -32,17 +32,17 @@ const changePasswordForm = reactive({
 const handleChangePassword = () => {
     errors.value = '';
     axios.post('/api/change-user-password', changePasswordForm)
-    .then((response) => {
-        toastr.success(response.data.message);
-        for (const field in changePasswordForm) {
-            changePasswordForm[field] = '';
-        }
-    })
-    .catch((error) => {
-        if (error.response && error.response.status === 422) {
-            errors.value = error.response.data.errors;
-        }
-    });
+        .then((response) => {
+            toastr.success(response.data.message);
+            for (const field in changePasswordForm) {
+                changePasswordForm[field] = '';
+            }
+        })
+        .catch((error) => {
+            if (error.response && error.response.status === 422) {
+                errors.value = error.response.data.errors;
+            }
+        });
 };
 
 const fileInput = ref(null);
@@ -59,9 +59,9 @@ const handleFileChange = (event) => {
     formData.append('profile_picture', file);
 
     axios.post('/api/upload-profile-image', formData)
-    .then((response) => {
-        toastr.success('Image uploaded successfully!');
-    });
+        .then((response) => {
+            toastr.success('Image uploaded successfully!');
+        });
 };
 </script>
 <template>
@@ -85,23 +85,8 @@ const handleFileChange = (event) => {
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3">
-                    <div class="card card-primary card-outline">
-                        <div class="card-body box-profile">
-                            <div class="text-center">
-                                <input @change="handleFileChange" ref="fileInput" type="file" class="d-none">
-                                <img @click="openFileInput" class="profile-user-img img-circle" :src="authUserStore.user.avatar" alt="User profile picture">
-                            </div>
-
-                            <h3 class="profile-username text-center">{{ authUserStore.user.name }}</h3>
-
-                            <p class="text-muted text-center">{{ authUserStore.user.role }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-9">
-                    <div class="card">
+                <div class="col-md-12">
+                    <div class="card card-success card-outline">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item"><a class="nav-link active" href="#profile" data-toggle="tab"><i
@@ -118,16 +103,19 @@ const handleFileChange = (event) => {
                                         <div class="form-group row">
                                             <label for="inputName" class="col-sm-2 col-form-label">Name</label>
                                             <div class="col-sm-10">
-                                                <input v-model="authUserStore.user.name" type="text" class="form-control" id="inputName" placeholder="Name">
-                                                <span class="text-danger text-sm" v-if="errors && errors.name">{{ errors.name[0] }}</span>
+                                                <input v-model="authUserStore.user.name" type="text" class="form-control"
+                                                    id="inputName" placeholder="Name">
+                                                <span class="text-danger text-sm" v-if="errors && errors.name">{{
+                                                    errors.name[0] }}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                                             <div class="col-sm-10">
-                                                <input v-model="authUserStore.user.email" type="email" class="form-control " id="inputEmail"
-                                                    placeholder="Email">
-                                                <span class="text-danger text-sm" v-if="errors && errors.email">{{ errors.email[0] }}</span>
+                                                <input v-model="authUserStore.user.email" type="email" class="form-control "
+                                                    id="inputEmail" placeholder="Email">
+                                                <span class="text-danger text-sm" v-if="errors && errors.email">{{
+                                                    errors.email[0] }}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -145,25 +133,30 @@ const handleFileChange = (event) => {
                                             <label for="currentPassword" class="col-sm-3 col-form-label">Current
                                                 Password</label>
                                             <div class="col-sm-9">
-                                                <input v-model="changePasswordForm.currentPassword" type="password" class="form-control " id="currentPassword"
+                                                <input v-model="changePasswordForm.currentPassword" type="password"
+                                                    class="form-control " id="currentPassword"
                                                     placeholder="Current Password">
-                                                    <span class="text-danger text-sm" v-if="errors && errors.current_password">{{ errors.current_password[0] }}</span>
+                                                <span class="text-danger text-sm"
+                                                    v-if="errors && errors.current_password">{{ errors.current_password[0]
+                                                    }}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="newPassword" class="col-sm-3 col-form-label">New
                                                 Password</label>
                                             <div class="col-sm-9">
-                                                <input v-model="changePasswordForm.password" type="password" class="form-control " id="newPassword"
-                                                    placeholder="New Password">
-                                                <span class="text-danger text-sm" v-if="errors && errors.password">{{ errors.password[0] }}</span>
+                                                <input v-model="changePasswordForm.password" type="password"
+                                                    class="form-control " id="newPassword" placeholder="New Password">
+                                                <span class="text-danger text-sm" v-if="errors && errors.password">{{
+                                                    errors.password[0] }}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="passwordConfirmation" class="col-sm-3 col-form-label">Confirm
                                                 New Password</label>
                                             <div class="col-sm-9">
-                                                <input v-model="changePasswordForm.passwordConfirmation" type="password" class="form-control " id="passwordConfirmation"
+                                                <input v-model="changePasswordForm.passwordConfirmation" type="password"
+                                                    class="form-control " id="passwordConfirmation"
                                                     placeholder="Confirm New Password">
                                             </div>
                                         </div>
@@ -178,16 +171,33 @@ const handleFileChange = (event) => {
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
 
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary card-outline">
+                            <div class="card-body box-profile">
+                                <div class="text-center">
+                                    <input @change="handleFileChange" ref="fileInput" type="file" class="d-none">
+                                    <img @click="openFileInput" class="profile-user-img img-circle"
+                                        :src="authUserStore.user.avatar" alt="User profile picture">
+                                </div>
+                                <h3 class="profile-username text-center">{{ authUserStore.user.name }}</h3>
+                                <p class="text-muted text-center">{{ authUserStore.user.role }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 </template>
 
-<style>
-    .profile-user-img:hover {
-        background-color: blue;
-        cursor: pointer;
-    }
-</style>
+<style>.profile-user-img:hover {
+    background-color: blue;
+    cursor: pointer;
+}</style>
