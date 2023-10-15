@@ -48,7 +48,7 @@ return new class extends Migration
             $table->integer('third_payment_days')->default(1);
             $table->string('image', 255)->nullable();
             $table->integer('image_id')->default(0);
-            $table->integer('order')->default(0);
+            $table->integer('display_order')->default(0);
             $table->tinyInteger('is_active')->default(1);
             $table->tinyInteger('is_featured')->default(0);
             $table->tinyInteger('is_new')->default(0);
@@ -59,6 +59,7 @@ return new class extends Migration
             $table->longText('sale_policies')->nullable();
             $table->tinyInteger('is_rental_policies')->nullable();
             $table->longText('rental_policies')->nullable();
+            $table->blob('admin_notes')->nullable();
             $table->integer('user_id')->nullable();
             $table->timestamps();
 

@@ -9,7 +9,7 @@ import 'flatpickr/dist/themes/light.css';
 
 const addNewLineItemForm = () => {
     var count = form.lineitems.length + 1;
-    form.lineitems.push({ title: '', value: '', value_type: 'fixed', apply_on: '', is_required: '', order: count, image: 'placeholder.png' })
+    form.lineitems.push({ title: '', value: '', value_type: 'fixed', apply_on: '', is_required: '', display_order: count, image: 'placeholder.png' })
 };
 const deleteLineItemForm = (index) => {
     form.lineitems.splice(index, 1)
@@ -92,7 +92,7 @@ const form = reactive({
     third_payment_days: '',
     image: 'placeholder.png', // Default image
     image_id: '',
-    order: '',
+    display_order: '',
     is_active: true, // Set default value
     is_featured: false, // Set default value
     is_new: true, // Set default value
@@ -103,6 +103,7 @@ const form = reactive({
     sale_policies: '',
     is_rental_policies: true,
     rental_policies: '',
+    admin_notes: '',
     user_id: '',
 });
 
@@ -210,7 +211,7 @@ const getProperty = () => {
             form.third_payment_days = data.third_payment_days;
             form.image = data.image;
             form.image_id = data.image_id;
-            form.order = data.order;
+            form.display_order = data.display_order;
             form.is_active = data.is_active ? true : false;
             form.is_featured = data.is_featured ? true : false;
             form.is_new = data.is_new ? true : false;
@@ -221,6 +222,7 @@ const getProperty = () => {
             form.sale_policies = data.sale_policies;
             form.is_rental_policies = data.is_rental_policies ? true : false;
             form.rental_policies = data.rental_policies;
+            form.admin_notes = data.admin_notes;
             form.user_id = data.user_id;
         })
 };
@@ -503,6 +505,14 @@ onMounted(() => {
                                                     <span class="invalid-feedback">{{ errors.capacity }}</span>
                                                 </div>
                                             </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="display_order">Display Order</label>
+                                                    <input v-model="form.display_order" type="number" class="form-control"
+                                                        :class="{ 'is-invalid': errors.display_order }" id="display_order">
+                                                    <span class="invalid-feedback">{{ errors.display_order }}</span>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>
@@ -733,7 +743,7 @@ onMounted(() => {
                                                             <label :for="'percent' + index">Percentage</label>
                                                         </div>
                                                         <div class="form-group"
-                                                            v-if="lineitem.value_type == 'percentage' && lineitem.order > 1">
+                                                            v-if="lineitem.value_type == 'percentage' && lineitem.display_order > 1">
                                                             <label>Apply To:</label><br />
                                                             <input type="radio" :id="'base' + index" value="base"
                                                                 v-model="lineitem.apply_on">
@@ -863,7 +873,18 @@ onMounted(() => {
                                     <!-- Tab Pan-->
                                     <div class="tab-pane" id="management">
                                         <h3 class="text-center">Management</h3>
-                                        Office Use Only
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="admin_notes">Admin Notes</label>
+                                                    <textarea v-model="form.admin_notes" class="form-control"
+                                                        :class="{ 'is-invalid': errors.admin_notes }" id="admin_notes"
+                                                        rows="3"
+                                                        placeholder="add notes here..."></textarea>
+                                                    <span class="invalid-feedback">{{ errors.admin_notes }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!-- Tab Pan-->
                                     <div class="tab-pane" id="reservations">
