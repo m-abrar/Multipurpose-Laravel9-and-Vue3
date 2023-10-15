@@ -255,11 +255,9 @@ onMounted(() => {
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">
-                        <span v-if="editMode">Edit</span>
-                        <span v-else>Create</span>
-                        Property
-                    </h1>
+                    <router-link :to="{ name: 'admin.properties' }" class="btn btn-outline-primary">
+                        <i class="fas fa-list"></i> All Properties
+                    </router-link>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -283,9 +281,15 @@ onMounted(() => {
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body ">
-                            <Form @submit="handleSubmit" v-slot="{ errors }">
+                    <Form @submit="handleSubmit" v-slot="{ errors }">
+                        <div class="card card-success card-outline">
+                            <div class="card-header">
+                                <h3 v-if="editMode">Edit: {{ form.name }}</h3>
+                                <h3 v-else>Add New Property</h3>
+                            </div>
+
+                            <!-- /.card-header -->
+                            <div class="card-body ">
                                 <ul class="nav nav-pills">
                                     <li class="nav-item"><a class="nav-link active show" href="#basic-detail"
                                             data-toggle="tab">Basic Details</a></li>
@@ -311,8 +315,8 @@ onMounted(() => {
                                     </li>
                                     <li class="nav-item"><a class="nav-link" href="#management"
                                             data-toggle="tab">Management</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#bookings"
-                                            data-toggle="tab">Bookings</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#bookings" data-toggle="tab">Bookings</a>
+                                    </li>
                                     <li class="nav-item"><a class="nav-link" href="#reports" data-toggle="tab">Reports</a>
                                     </li>
                                     <li class="nav-item"><a class="nav-link" href="#statistics"
@@ -881,8 +885,7 @@ onMounted(() => {
                                                     <label for="admin_notes">Admin Notes</label>
                                                     <textarea v-model="form.admin_notes" class="form-control"
                                                         :class="{ 'is-invalid': errors.admin_notes }" id="admin_notes"
-                                                        rows="3"
-                                                        placeholder="add notes here..."></textarea>
+                                                        rows="3" placeholder="add notes here..."></textarea>
                                                     <span class="invalid-feedback">{{ errors.admin_notes }}</span>
                                                 </div>
                                             </div>
@@ -900,10 +903,10 @@ onMounted(() => {
                                                 <th>To Date</th>
                                             </thead>
                                             <tr v-for="booking in form.bookings">
-                                                <td>{{booking.id}}</td>
-                                                <td>{{booking.firstname}} {{booking.lastname}}</td>
-                                                <td>{{booking.date_start}}</td>
-                                                <td>{{booking.date_end}}</td>
+                                                <td>{{ booking.id }}</td>
+                                                <td>{{ booking.firstname }} {{ booking.lastname }}</td>
+                                                <td>{{ booking.date_start }}</td>
+                                                <td>{{ booking.date_end }}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -920,11 +923,15 @@ onMounted(() => {
                                     <!-- /.tab-pane -->
                                 </div>
 
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </Form>
-                        </div>
 
-                    </div>
+                            </div>
+                            
+                            <div class="card-footer">
+                                <button v-if="editMode" type="submit" class="btn btn-success">Update</button>
+                                <button v-else type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </Form>
                 </div>
             </div>
         </div>

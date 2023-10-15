@@ -97,7 +97,7 @@ class PropertiesController extends Controller
             'property_type_id.required' => 'The property type field is required.',
         ]);
         // Update the model with all form fields
-        $properties->update($request->except(['amenities','features','lineitems','services','neighbours','rooms','prices']));
+        $properties->update($request->except(['amenities','features','lineitems','services','neighbours','rooms','prices','bookings']));
 
         // Use the sync method to update the selected amenities
         $properties->amenities()->sync($request->input('amenities', []));
