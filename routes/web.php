@@ -36,6 +36,8 @@ Route::get('/', function () {
 // Route::get('/admin/dashboard', function () {
 //     return view('dashboard');
 // });
+Route::post('/api/upload-file', [ApplicationController::class, 'uploadFile']);
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/api/stats/appointments', [DashboardStatController::class, 'appointments']);

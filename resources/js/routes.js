@@ -1,4 +1,6 @@
 import Dashboard from './components/Dashboard.vue';
+import Dropzone from './components/Dropzone.vue';
+import UploadFiles from './components/UploadFiles.vue';
 import ListAppointments from './pages/appointments/ListAppointments.vue';
 import AppointmentForm from './pages/appointments/AppointmentForm.vue';
 import ListBookings from './pages/bookings/ListBookings.vue';
@@ -33,6 +35,18 @@ export default [
         path: '/admin/dashboard',
         name: 'admin.dashboard',
         component: Dashboard,
+    },
+
+    {
+        path: '/admin/dropzone',
+        name: 'admin.dropzone',
+        component: Dropzone,
+    },    
+    
+    {
+        path: '/admin/uploadfiles',
+        name: 'admin.uploadfiles',
+        component: UploadFiles,
     },
 
     {
