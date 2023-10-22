@@ -10,6 +10,8 @@ use App\Models\PropertyNeighbour;
 use App\Models\PropertyRoom;
 use App\Models\PropertyPrice;
 use Illuminate\Http\Request;
+    use App\Models\Locations;
+    use App\Models\MediaManager;
 
 class PropertiesController extends Controller
 {
@@ -22,6 +24,99 @@ class PropertiesController extends Controller
         })
             ->latest()
             ->paginate();
+    }
+
+    public function media($id)
+    {
+        
+        $property = Properties::findOrFail($id);
+
+        $featuredMediaFile = $property->mediaFiles()
+            ->wherePivot('is_featured', true)
+            ->latest()
+            ->first();
+        if ($featuredMediaFile) {
+            // Check if $featuredMediaFile is not null
+            $featuredMediaFile->url = $featuredMediaFile->getUrl();
+        }
+
+        $mediaFiles = $property->mediaFiles()->orderBy('display_order', 'ASC')->get();
+        $mediaFiles->each(function ($mediaItem) {
+            $mediaItem->url = $mediaItem->getUrl();
+        });
+    
+
+        $attachmentIDs = $mediaFiles->map->id;
+
+
+        return [
+            'featuredMediaFile' => $featuredMediaFile,
+            'mediaFiles' => $mediaFiles,
+            'attachmentIDs' => $attachmentIDs,
+        ];
+
+    }
+
+    public function updateIsFeatured($property_id, $media_id) {
+        $property = Properties::findOrFail($property_id);
+        
+        $mediaIds = $property->mediaFiles()->pluck('media_id')->toArray();
+
+        foreach($mediaIds as $mediaId){
+            $property->mediaFiles()->updateExistingPivot($mediaId, ['is_featured' => false]); // un-feature all files
+        }
+
+        $response = $property->mediaFiles()->updateExistingPivot($media_id, ['is_featured' => true]);
+        return $response;
+
+    }
+
+    
+    public function addRemoveMedia($property_id, $media_id) {
+        $property = Properties::findOrFail($property_id);
+
+        $existingMedia = $property->mediaFiles()->find($media_id);
+        if(@$existingMedia){
+            // The media_id is already attached, so detach it
+            $response = $property->mediaFiles()->detach($media_id, ['model_type' => get_class($property)]);
+            return 'removed';
+        } else {
+            // The media_id is not attached, so attach it
+            $response = $property->mediaFiles()->attach($media_id, ['model_type' => get_class($property)]);
+            return 'attached';
+        }
+    
+    }
+
+
+    public function test($id)
+    {
+        $ids = [8,9,10];
+        
+        // $mediaFiles = MediaFile::find($ids);
+
+        $location = Locations::findOrFail($id);
+        $response = $location->mediaFiles()->detach($ids, ['model_type' => get_class($location)]);
+        $response = $location->mediaFiles()->attach($ids, ['model_type' => get_class($location), 'is_featured' => true]);
+
+        $mediaFiles = $location->mediaFile; //Trait Function
+
+        $mediaFiles = $location->mediaFiles()
+                            ->wherePivot('is_featured', true)
+                            ->get();
+
+
+        echo $mediaFilesFeaturedURL = $location->featuredMediaFileURL();
+        echo 'featured<br/>';
+
+
+        foreach ($mediaFiles as $mediaItem) {
+            $url = $location->mediaFileURL($mediaItem->id);
+            echo $url . '<br>';
+        }
+
+
+        dd($mediaFiles);
     }
 
     public function store(Request $request, Properties $properties)

@@ -7,9 +7,41 @@ use App\Http\Controllers\Controller;
 use App\Models\Properties;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\MediaManager;
 
 class LocationsController extends Controller
 {
+    public function media($id)
+    {
+        $ids = [8,9,10];
+        
+        // $mediaFiles = MediaFile::find($ids);
+
+        $location = Locations::findOrFail($id);
+        // $response = $location->mediaFiles()->detach($ids, ['model_type' => get_class($location)]);
+        // $response = $location->mediaFiles()->attach($ids, ['model_type' => get_class($location), 'is_featured' => true]);
+
+        $mediaFiles = $location->mediaFile; //Trait Function
+
+
+
+        $mediaFiles = $location->mediaFiles()
+                            ->wherePivot('is_featured', true)
+                            ->get();
+
+
+        echo $mediaFilesFeaturedURL = $location->featuredMediaFileURL();
+        echo 'featured<br/>';
+
+
+        foreach ($mediaFiles as $mediaItem) {
+            $url = $location->mediaFileURL($mediaItem->id);
+            echo $url . '<br>';
+        }
+        dd($mediaFiles);
+
+    }
+
     public function index()
     {
         return Locations::all();

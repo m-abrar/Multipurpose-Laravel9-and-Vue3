@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MediaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,11 +33,31 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/wp', function () {
+    return 'TestTestTest';
+});
 
 // Route::get('/admin/dashboard', function () {
 //     return view('dashboard');
 // });
-Route::post('/api/upload-file', [ApplicationController::class, 'uploadFile']);
+
+Route::get('/location/{id}/media', [LocationsController::class, 'media'])->name('location.media');
+Route::get('/property/{id}/media', [PropertiesController::class, 'media'])->name('property.media');
+Route::get('/api/property/{id}/media', [PropertiesController::class, 'media'])->name('api.property.media');
+Route::get('/api/property/{property_id}/image-update-featured/{media_id}', [PropertiesController::class, 'updateIsFeatured'])->name('api.property.media.featured');
+Route::get('/api/property/{property_id}/media-add-remove/{media_id}', [PropertiesController::class, 'addRemoveMedia'])->name('api.property.media.update');
+
+
+Route::get('/api/media', [MediaController::class, 'index'])->name('media.index');
+Route::get('/media/{id}/edit', [MediaController::class, 'edit'])->name('media.edit');
+Route::post('/media/upload', [MediaController::class, 'upload'])->name('media.upload');
+Route::delete('/api/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
+Route::post('/media-upload', [MediaController::class, 'upload']);
+
+// Route::post('/api/upload-file', [ApplicationController::class, 'uploadFile']);
+
+
+
 
 
 Route::middleware('auth')->group(function () {

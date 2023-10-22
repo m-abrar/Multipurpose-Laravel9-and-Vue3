@@ -6,6 +6,11 @@ import { useToastr } from '@/toastr';
 import { Form } from 'vee-validate';
 import flatpickr from "flatpickr";
 import 'flatpickr/dist/themes/light.css';
+const router = useRouter();
+const route = useRoute();
+const toastr = useToastr();
+
+import PropertiesFormPictures from "./PropertiesFormPictures.vue"; // Import the child component
 
 const addNewLineItemForm = () => {
     var count = form.lineitems.length + 1;
@@ -49,9 +54,7 @@ const deleteRoomForm = (index) => {
 };
 
 
-const router = useRouter();
-const route = useRoute();
-const toastr = useToastr();
+
 const form = reactive({
     name: '',
     slug: '',
@@ -170,7 +173,7 @@ const getAvailableFeatures = () => {
         })
 };
 
-const getProperty = () => {
+const getProperty = () => { 
     axios.get(`/api/properties/${route.params.id}/edit`)
         .then(({ data }) => {
             form.name = data.name;
@@ -925,6 +928,7 @@ onMounted(() => {
 
 
                             </div>
+
                             
                             <div class="card-footer">
                                 <button v-if="editMode" type="submit" class="btn btn-success">Update</button>
@@ -936,6 +940,7 @@ onMounted(() => {
             </div>
         </div>
     </div>
+    <properties-form-pictures></properties-form-pictures>
 </template>
 
 <style scoped>

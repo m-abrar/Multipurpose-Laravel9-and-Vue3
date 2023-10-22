@@ -100,7 +100,7 @@ onMounted(() => {
                                 <span class="badge badge-pill badge-info">{{ propertiesCount }}</span>
                             </button>
                             <button v-for="type in propertyTypes" @click="getProperties(type.id)" type="button"
-                                class="btn" :class="[selectedType === type.id ? 'btn-secondary' : 'btn-default']">
+                                :class="[selectedType === type.id ? 'btn btn-secondary' : 'btn btn-default']">
                                 <span class="mr-1">{{ type.name }}</span>
                                 <span class="badge badge-pill" :class="`badge-${type.color}`">{{ type.count }}</span>
                             </button>
@@ -145,5 +145,5 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-    </div>
+    </div>  
 </template>

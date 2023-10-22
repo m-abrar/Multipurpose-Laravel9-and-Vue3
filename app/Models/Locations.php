@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Models\MediaManager;
+use App\Traits\MediaFile;
 
-class Locations extends Model
+class Locations extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia, MediaFile;
 
     /**
      * The attributes that are mass assignable.
@@ -24,32 +28,9 @@ class Locations extends Model
 
     protected $guarded = [];
 
-    // protected $appends = ['formatted_start_time', 'formatted_end_time'];
 
-    protected $casts = [
-    //     'start_time' => 'datetime',
-    //     'end_time' => 'datetime',
-    //     'status' => AppointmentStatus::class,
-    ];
+    protected $casts = [];
 
-    // public function client(): BelongsTo
-    // {
-    //     return $this->belongsTo(Client::class);
-    // }
-
-    // public function formattedStartTime(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn () => $this->start_time->format('Y-m-d h:i A'),
-    //     );
-    // }
-
-    // public function formattedEndTime(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn () => $this->end_time->format('Y-m-d h:i A'),
-    //     );
-    // }
 
     public function image(): Attribute
     {
@@ -62,4 +43,5 @@ class Locations extends Model
     {
         return $this->belongsToMany(Properties::class, 'property_feature_pivot', 'feature_id', 'property_id');
     }
+
 }

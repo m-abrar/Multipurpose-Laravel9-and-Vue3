@@ -48,6 +48,16 @@ const logout = () => {
                     </li>
 
                     <li class="nav-item">
+                        <router-link to="/admin/mediamanager"
+                            :class="$route.path.startsWith('/admin/mediamanager') ? 'active' : ''" class="nav-link">
+                            <i class="nav-icon fas fa-calendar-alt"></i>
+                            <p>
+                                Media Manager
+                            </p>
+                        </router-link>
+                    </li>
+
+                    <li class="nav-item">
                         <router-link to="/admin/properties"
                             :class="$route.path.startsWith('/admin/properties') ? 'active' : ''" class="nav-link">
                             <i class="nav-icon fas fa-calendar-alt"></i>

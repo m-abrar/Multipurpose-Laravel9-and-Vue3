@@ -1,6 +1,7 @@
 import Dashboard from './components/Dashboard.vue';
 import Dropzone from './components/Dropzone.vue';
-import UploadFiles from './components/UploadFiles.vue';
+import MediaManager from './components/MediaManager.vue';
+import UploadFiles from './components/UploadFiles.vue'; //will be removed soon
 import ListAppointments from './pages/appointments/ListAppointments.vue';
 import AppointmentForm from './pages/appointments/AppointmentForm.vue';
 import ListBookings from './pages/bookings/ListBookings.vue';
@@ -44,10 +45,18 @@ export default [
     },    
     
     {
+        path: '/admin/mediamanager',
+        name: 'admin.mediamanager',
+        component: MediaManager,
+    },
+
+        
+    {
         path: '/admin/uploadfiles',
         name: 'admin.uploadfiles',
         component: UploadFiles,
     },
+
 
     {
         path: '/admin/appointments',

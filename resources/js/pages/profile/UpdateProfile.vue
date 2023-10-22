@@ -81,7 +81,6 @@ const handleFileChange = (event) => {
         </div>
     </div>
 
-
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -174,21 +173,21 @@ const handleFileChange = (event) => {
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card card-primary card-outline">
-                            <div class="card-body box-profile">
-                                <div class="text-center">
-                                    <input @change="handleFileChange" ref="fileInput" type="file" class="d-none">
-                                    <img @click="openFileInput" class="profile-user-img img-circle"
-                                        :src="authUserStore.user.avatar" alt="User profile picture">
-                                </div>
-                                <h3 class="profile-username text-center">{{ authUserStore.user.name }}</h3>
-                                <p class="text-muted text-center">{{ authUserStore.user.role }}</p>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body box-profile">
+                            <div class="text-center">
+                                <input @change="handleFileChange" ref="fileInput" type="file" class="d-none">
+                                <img @click="openFileInput" class="profile-user-img img-circle"
+                                    :src="authUserStore.user.avatar" alt="User profile picture">
                             </div>
+                            <h3 class="profile-username text-center">{{ authUserStore.user.name }}</h3>
+                            <p class="text-muted text-center">{{ authUserStore.user.role }}</p>
                         </div>
                     </div>
                 </div>
@@ -197,7 +196,9 @@ const handleFileChange = (event) => {
     </div>
 </template>
 
-<style>.profile-user-img:hover {
+<style>
+.profile-user-img:hover {
     background-color: blue;
     cursor: pointer;
-}</style>
+}
+</style>

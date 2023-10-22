@@ -18,6 +18,7 @@ export default {
       lastTarget: null,
     };
   },
+
   methods: {
     hideWrapper() {
       this.wrapperVisibility = "hidden";
@@ -27,15 +28,25 @@ export default {
       this.wrapperVisibility = "";
       this.wrapperOpacity = 0.5;
     },
+
+    refreshParentFiles(files) {
+      this.$emit('refresh-parent-files');
+    },
+
   },
   mounted() {
+    const vm = this;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const myDropzone = new Dropzone(".dropzone", {
-      url: "http://127.0.0.1:8000/api/upload-file",
-      // Other Dropzone options go here
+      url: "http://127.0.0.1:8000/media-upload",
       headers: {
-        'X-CSRF-TOKEN': "QiW0Uyu6upss2aqDdMgfatQJX2JZtxCasSkfadla",
+        'X-CSRF-TOKEN': csrfToken,
       },
       init: function () {
+        
+        this.on("success", (file, response) => {
+            vm.refreshParentFiles();
+        });
 
         this.on("error", function (file, errorMessage) {
 
@@ -45,16 +56,14 @@ export default {
           // Ensure that errorMessage is a string
           if (typeof customErrorMessage === 'object') {
             customErrorMessage = customErrorMessage.errors.file;
-            alert(customErrorMessage);
           }
           // Set the error message for the file's preview element
           file.previewElement.querySelector(".dz-error-message span").textContent = customErrorMessage;
 
         });
       },
+
     });
-
-
 
     window.addEventListener("dragenter", (e) => {
       this.showWrapper();
