@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AmenitiesController;
 use App\Http\Controllers\Admin\LocationsController;
 use App\Http\Controllers\Admin\FeaturesController;
 use App\Http\Controllers\Admin\ServicesController;
+use App\Http\Controllers\Admin\SlidersController;
 use App\Http\Controllers\Admin\LineItemsController;
 use App\Http\Controllers\Admin\AppointmentStatusController;
 use App\Http\Controllers\Admin\ClientController;
@@ -45,12 +46,18 @@ Route::get('/wp', function () {
 // /api/service/{service_id}/media/featured-update/{media_id}
 // /api/service/{service_id}/media/add-remove/{media_id}
 
+Route::prefix('/api/slider/{slider_id}/media')->name('api.slider.media.')->group(function () {
+    Route::get('/all', [SlidersController::class, 'getAllMedia'])->name('index');
+    Route::get('/featured-update/{media_id}', [SlidersController::class, 'featuredUpdate'])->name('featured-update');
+    Route::get('/add-remove/{media_id}', [SlidersController::class, 'addOrRemoveMedia'])->name('add-remove');
+});
+
+
 Route::prefix('/api/service/{service_id}/media')->name('api.service.media.')->group(function () {
     Route::get('/all', [ServicesController::class, 'getAllMedia'])->name('index');
     Route::get('/featured-update/{media_id}', [ServicesController::class, 'featuredUpdate'])->name('featured-update');
     Route::get('/add-remove/{media_id}', [ServicesController::class, 'addOrRemoveMedia'])->name('add-remove');
 });
-
 
 Route::prefix('/api/location/{location_id}/media')->name('api.location.media.')->group(function () {
     Route::get('/all', [LocationsController::class, 'getAllMedia'])->name('index');
@@ -105,6 +112,14 @@ Route::post('/media-upload', [MediaController::class, 'upload']);
 
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/api/sliders', [SlidersController::class, 'index']);
+    Route::post('/api/sliders/create', [SlidersController::class, 'store']);
+    Route::get('/api/sliders/{id}/edit', [SlidersController::class, 'edit']);
+    Route::put('/api/sliders/{sliders}/edit', [SlidersController::class, 'update']);
+    Route::delete('/api/sliders/{sliders}', [SlidersController::class, 'destroy']);
+
+
     Route::get('/api/stats/appointments', [DashboardStatController::class, 'appointments']);
     Route::get('/api/stats/users', [DashboardStatController::class, 'users']);
 

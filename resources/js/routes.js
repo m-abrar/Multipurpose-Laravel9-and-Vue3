@@ -2,6 +2,8 @@ import Dashboard from './components/Dashboard.vue';
 import Dropzone from './components/Dropzone.vue';
 import MediaManager from './components/MediaManager.vue';
 import UploadFiles from './components/UploadFiles.vue'; //will be removed soon
+import ListSliders from './pages/sliders/ListSliders.vue';
+import SlidersForm from './pages/sliders/SlidersForm.vue';
 import ListAppointments from './pages/appointments/ListAppointments.vue';
 import AppointmentForm from './pages/appointments/AppointmentForm.vue';
 import ListBookings from './pages/bookings/ListBookings.vue';
@@ -96,6 +98,30 @@ export default [
         component: BookingForm,
     },
         
+
+
+
+
+    {
+        path: '/admin/sliders',
+        name: 'admin.sliders',
+        component: ListSliders,
+    },
+
+    {
+        path: '/admin/sliders/create',
+        name: 'admin.sliders.create',
+        component: SlidersForm,
+    },
+
+    {
+        path: '/admin/sliders/:id/edit',
+        name: 'admin.sliders.edit',
+        component: SlidersForm,
+    },
+        
+
+
 
 
     {
