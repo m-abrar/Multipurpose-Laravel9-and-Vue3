@@ -52,10 +52,10 @@ class PropertyTypes extends Model
     //     );
     // }
 
-    public function image(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => asset(Storage::url($value) ?? 'noimage.png'),
-        );
-    }
+    // public function image(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => asset(Storage::url($value) ?? 'noimage.png'),
+    //     );
+    // }
 }
