@@ -4,6 +4,7 @@ import { reactive, onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useToastr } from '@/toastr';
 import { Form } from 'vee-validate';
+import AmenitiesFormPictures from "./AmenitiesFormPictures.vue"; // Import the child component
 
 const router = useRouter();
 const route = useRoute();
@@ -155,4 +156,5 @@ const handleFileChange = async (event) => {
             </div>
         </div>
     </div>
+    <amenities-form-pictures></amenities-form-pictures>
 </template>

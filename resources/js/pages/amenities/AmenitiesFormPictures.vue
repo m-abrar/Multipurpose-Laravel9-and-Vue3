@@ -160,7 +160,7 @@ export default {
     const featuredMediaFile = ref([]);
 
     const getMediaFiles = () => {
-      axios.get(`/api/amenity/${route.params.id}/media`)
+      axios.get(`/api/amenity/${route.params.id}/media/all`)
         .then((response) => {
           featuredMediaFile.value = response.data.featuredMediaFile;
           mediaFiles.value = response.data.mediaFiles;

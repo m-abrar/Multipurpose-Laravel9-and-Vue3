@@ -16,6 +16,64 @@ class AmenitiesController extends Controller
     }
 
 
+    public function getAllMedia($amenity_id)
+    {
+        $amenity = Amenities::findOrFail($amenity_id);
+
+        $featuredMediaFile = $amenity->mediaFiles()
+            ->wherePivot('is_featured', true)
+            ->latest()
+            ->first();
+        if ($featuredMediaFile) {
+            $featuredMediaFile->url = $featuredMediaFile->getUrl();
+        }
+
+        $mediaFiles = $amenity->mediaFiles()->orderBy('display_order', 'ASC')->get();
+
+        $mediaFiles->each(function ($mediaItem) {
+            $mediaItem->url = $mediaItem->getUrl();
+        });
+
+        $attachmentIDs = $mediaFiles->map->id;
+
+        return [
+            'featuredMediaFile' => $featuredMediaFile,
+            'mediaFiles' => $mediaFiles,
+            'attachmentIDs' => $attachmentIDs,
+        ];
+    }
+
+    public function featuredUpdate($amenity_id, $media_id)
+    {
+        $amenity = Amenities::findOrFail($amenity_id);
+
+        $mediaIds = $amenity->mediaFiles()->pluck('media_id')->toArray();
+
+        foreach ($mediaIds as $mediaId) {
+            $amenity->mediaFiles()->updateExistingPivot($mediaId, ['is_featured' => false]);
+        }
+
+        $response = $amenity->mediaFiles()->updateExistingPivot($media_id, ['is_featured' => true]);
+
+        return $response;
+    }
+
+    public function addOrRemoveMedia($amenity_id, $media_id)
+    {
+        $amenity = Amenities::findOrFail($amenity_id);
+
+        $existingMedia = $amenity->mediaFiles()->find($media_id);
+
+        if ($existingMedia) {
+            $response = $amenity->mediaFiles()->detach($media_id, ['model_type' => get_class($amenity)]);
+            return 'removed';
+        } else {
+            $response = $amenity->mediaFiles()->attach($media_id, ['model_type' => get_class($amenity)]);
+            return 'attached';
+        }
+    }
+
+
     public function store(Request $request)
     {
         $validated = request()->validate([
