@@ -15,6 +15,69 @@ class LineItemsController extends Controller
         return LineItem::all();
     }
 
+    
+    public function getAllMedia($line_item_id)
+    {
+        $lineItem = LineItem::findOrFail($line_item_id);
+
+        $featuredMediaFile = $lineItem->mediaFiles()
+            ->wherePivot('is_featured', true)
+            ->latest()
+            ->first();
+        if ($featuredMediaFile) {
+            // Check if $featuredMediaFile is not null
+            $featuredMediaFile->url = $featuredMediaFile->getUrl();
+        }
+
+        // Retrieve all media for the line item
+        $mediaFiles = $lineItem->mediaFiles()->orderBy('display_order', 'ASC')->get();
+
+        // Iterate through media files and set URLs
+        $mediaFiles->each(function ($mediaItem) {
+            $mediaItem->url = $mediaItem->getUrl();
+        });
+
+        $attachmentIDs = $mediaFiles->map->id;
+
+        return [
+            'featuredMediaFile' => $featuredMediaFile,
+            'mediaFiles' => $mediaFiles,
+            'attachmentIDs' => $attachmentIDs,
+        ];
+    }
+
+    public function featuredUpdate($line_item_id, $media_id)
+    {
+        $lineItem = LineItem::findOrFail($line_item_id);
+
+        $mediaIds = $lineItem->mediaFiles()->pluck('media_id')->toArray();
+
+        foreach ($mediaIds as $mediaId) {
+            $lineItem->mediaFiles()->updateExistingPivot($mediaId, ['is_featured' => false]);
+        }
+
+        $response = $lineItem->mediaFiles()->updateExistingPivot($media_id, ['is_featured' => true]);
+
+        return $response;
+    }
+
+    public function addOrRemoveMedia($line_item_id, $media_id)
+    {
+        $lineItem = LineItem::findOrFail($line_item_id);
+
+        $existingMedia = $lineItem->mediaFiles()->find($media_id);
+
+        if ($existingMedia) {
+            // The media_id is already attached, so detach it
+            $response = $lineItem->mediaFiles()->detach($media_id, ['model_type' => get_class($lineItem)]);
+            return 'removed';
+        } else {
+            // The media_id is not attached, so attach it
+            $response = $lineItem->mediaFiles()->attach($media_id, ['model_type' => get_class($lineItem)]);
+            return 'attached';
+        }
+    }
+
 
     public function store(Request $request)
     {

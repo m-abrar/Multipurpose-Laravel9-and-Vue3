@@ -15,6 +15,72 @@ class FeaturesController extends Controller
         return Features::all();
     }
 
+    
+    
+    public function getAllMedia($feature_id)
+    {
+        $feature = Features::findOrFail($feature_id);
+
+        $featuredMediaFile = $feature->mediaFiles()
+            ->wherePivot('is_featured', true)
+            ->latest()
+            ->first();
+        if ($featuredMediaFile) {
+            // Check if $featuredMediaFile is not null
+            $featuredMediaFile->url = $featuredMediaFile->getUrl();
+        }
+
+        // Retrieve all media for the feature
+        $mediaFiles = $feature->mediaFiles()->orderBy('display_order', 'ASC')->get();
+
+        // Iterate through media files and set URLs
+        $mediaFiles->each(function ($mediaItem) {
+            $mediaItem->url = $mediaItem->getUrl();
+        });
+
+        $attachmentIDs = $mediaFiles->map->id;
+
+        return [
+            'featuredMediaFile' => $featuredMediaFile,
+            'mediaFiles' => $mediaFiles,
+            'attachmentIDs' => $attachmentIDs,
+        ];
+    }
+
+    public function featuredUpdate($feature_id, $media_id)
+    {
+        $feature = Features::findOrFail($feature_id);
+
+        $mediaIds = $feature->mediaFiles()->pluck('media_id')->toArray();
+
+        foreach ($mediaIds as $mediaId) {
+            $feature->mediaFiles()->updateExistingPivot($mediaId, ['is_featured' => false]);
+        }
+
+        $response = $feature->mediaFiles()->updateExistingPivot($media_id, ['is_featured' => true]);
+
+        return $response;
+    }
+
+    public function addOrRemoveMedia($feature_id, $media_id)
+    {
+        $feature = Features::findOrFail($feature_id);
+
+        $existingMedia = $feature->mediaFiles()->find($media_id);
+
+        if ($existingMedia) {
+            // The media_id is already attached, so detach it
+            $response = $feature->mediaFiles()->detach($media_id, ['model_type' => get_class($feature)]);
+            return 'removed';
+        } else {
+            // The media_id is not attached, so attach it
+            $response = $feature->mediaFiles()->attach($media_id, ['model_type' => get_class($feature)]);
+            return 'attached';
+        }
+    }
+
+    
+    
 
     public function store(Request $request)
     {

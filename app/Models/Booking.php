@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\MediaFile;
 
 class Booking extends Model
 {
-    use HasFactory;
+    use HasFactory, MediaFile;
 
     protected $guarded = [];
 

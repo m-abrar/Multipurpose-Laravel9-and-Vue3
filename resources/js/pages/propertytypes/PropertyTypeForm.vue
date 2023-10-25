@@ -4,6 +4,7 @@ import { reactive, onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useToastr } from '@/toastr';
 import { Form } from 'vee-validate';
+import PropertyTypeFormPictures from "./PropertyTypeFormPictures.vue"; // Import the child component
 
 const router = useRouter();
 const route = useRoute();
@@ -147,12 +148,6 @@ const handleFileChange = async (event) => {
                                     <span class="invalid-feedback">{{ errors.description }}</span>
                                 </div>
 
-                                <div class="form-group text-center">
-                                    <input @change="handleFileChange" ref="fileInput" type="file" class="d-none">
-                                    <img @click="openFileInput" class="profile-user-img img-circle" :src="form.image" alt="Picture">
-                                    <input v-model="form.image_created" type="hidden">
-                                </div>
-
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </Form>
                         </div>
@@ -161,4 +156,6 @@ const handleFileChange = async (event) => {
             </div>
         </div>
     </div>
+<property-type-form-pictures></property-type-form-pictures>
+
 </template>

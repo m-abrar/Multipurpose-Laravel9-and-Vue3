@@ -99,7 +99,6 @@
       </div>
     </div>
   </div>
-
 </template>
   
 <script>
@@ -121,8 +120,8 @@ export default {
 
     const addRemoveAttachment = (attachment_id) => {
       
-      var feature_image_url = `/api/property/${route.params.id}/media/add-remove/${attachment_id}`;
-      axios.get(feature_image_url)
+      var media_add_remove_url = `/api/service/${route.params.id}/media/add-remove/${attachment_id}`;
+      axios.get(media_add_remove_url)
         .then((response) => {
           toastr.success('Image has been ' + JSON.stringify(response.data));
           getMediaFiles();
@@ -161,14 +160,14 @@ export default {
     const featuredMediaFile = ref([]);
 
     const getMediaFiles = () => {
-      axios.get(`/api/property/${route.params.id}/media/all`)
+      axios.get(`/api/service/${route.params.id}/media/all`)
         .then((response) => {
           featuredMediaFile.value = response.data.featuredMediaFile;
           mediaFiles.value = response.data.mediaFiles;
           attachmentIDs.value = response.data.attachmentIDs;
         })
         .catch((error) => {
-          console.error('Error fetching property images:', error);
+          console.error('Error fetching service images:', error);
         });
     };
 
@@ -176,7 +175,7 @@ export default {
       this.attachments.map((attachment, index) => {
         attachment.order = index + 1;
       })
-      axios.put('/api/property/images-order-update', {
+      axios.put('/api/service/images-order-update', {
         attachments: this.attachments
       }).then((response) => {
         console.log(response);
@@ -185,7 +184,7 @@ export default {
 
     const featureAttachment = (attachment_id) => {
 
-      var feature_image_url = `/api/property/${route.params.id}/media/featured-update/${attachment_id}`;
+      var feature_image_url = `/api/service/${route.params.id}/media/featured-update/${attachment_id}`;
 
       axios.get(feature_image_url)
         .then((response) => {

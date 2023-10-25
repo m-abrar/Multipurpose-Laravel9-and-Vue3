@@ -6,11 +6,13 @@ import { useToastr } from '@/toastr';
 import { Form } from 'vee-validate';
 import flatpickr from "flatpickr";
 import 'flatpickr/dist/themes/light.css';
+import PropertiesFormPictures from "./PropertiesFormPictures.vue"; // Import the child component
+
+
 const router = useRouter();
 const route = useRoute();
 const toastr = useToastr();
 
-import PropertiesFormPictures from "./PropertiesFormPictures.vue"; // Import the child component
 
 const addNewLineItemForm = () => {
     var count = form.lineitems.length + 1;

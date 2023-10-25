@@ -4,6 +4,7 @@ import { reactive, onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useToastr } from '@/toastr';
 import { Form } from 'vee-validate';
+import LineItemsFormPictures from "./LineItemsFormPictures.vue"; // Import the child component
 
 const router = useRouter();
 const route = useRoute();
@@ -105,7 +106,7 @@ const handleFileChange = async (event) => {
                     <h1 class="m-0">
                         <span v-if="editMode">Edit</span>
                         <span v-else>Create</span>
-                        Service
+                        Line Item
                     </h1>
                 </div>
                 <div class="col-sm-6">
@@ -147,11 +148,6 @@ const handleFileChange = async (event) => {
                                     <span class="invalid-feedback">{{ errors.description }}</span>
                                 </div>
 
-                                <div class="form-group text-center">
-                                    <input @change="handleFileChange" ref="fileInput" type="file" class="d-none">
-                                    <img @click="openFileInput" class="profile-user-img img-circle" :src="form.image" alt="Picture">
-                                    <input v-model="form.image_created" type="hidden">
-                                </div>
 
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </Form>
@@ -161,4 +157,6 @@ const handleFileChange = async (event) => {
             </div>
         </div>
     </div>
+<line-items-form-pictures></line-items-form-pictures>
+
 </template>

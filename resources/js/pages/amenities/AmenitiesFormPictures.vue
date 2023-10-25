@@ -99,7 +99,6 @@
       </div>
     </div>
   </div>
-
 </template>
   
 <script>
@@ -120,8 +119,8 @@ export default {
     const toastr = useToastr();
 
     const addRemoveAttachment = (attachment_id) => {
-      
-      var feature_image_url = `/api/property/${route.params.id}/media/add-remove/${attachment_id}`;
+
+      var feature_image_url = `/api/amenity/${route.params.id}/media/add-remove/${attachment_id}`;
       axios.get(feature_image_url)
         .then((response) => {
           toastr.success('Image has been ' + JSON.stringify(response.data));
@@ -161,14 +160,14 @@ export default {
     const featuredMediaFile = ref([]);
 
     const getMediaFiles = () => {
-      axios.get(`/api/property/${route.params.id}/media/all`)
+      axios.get(`/api/amenity/${route.params.id}/media`)
         .then((response) => {
           featuredMediaFile.value = response.data.featuredMediaFile;
           mediaFiles.value = response.data.mediaFiles;
           attachmentIDs.value = response.data.attachmentIDs;
         })
         .catch((error) => {
-          console.error('Error fetching property images:', error);
+          console.error('Error fetching amenity images:', error);
         });
     };
 
@@ -176,7 +175,7 @@ export default {
       this.attachments.map((attachment, index) => {
         attachment.order = index + 1;
       })
-      axios.put('/api/property/images-order-update', {
+      axios.put('/api/amenity/images-order-update', {
         attachments: this.attachments
       }).then((response) => {
         console.log(response);
@@ -185,7 +184,7 @@ export default {
 
     const featureAttachment = (attachment_id) => {
 
-      var feature_image_url = `/api/property/${route.params.id}/media/featured-update/${attachment_id}`;
+      var feature_image_url = `/api/amenity/${route.params.id}/media/featured-update/${attachment_id}`;
 
       axios.get(feature_image_url)
         .then((response) => {

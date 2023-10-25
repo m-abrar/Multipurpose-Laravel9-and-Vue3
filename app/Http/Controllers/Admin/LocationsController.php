@@ -11,8 +11,82 @@ use App\Models\MediaManager;
 
 class LocationsController extends Controller
 {
+    
+    
+    
+    public function getAllMedia($location_id)
+    {
+        $location = Locations::findOrFail($location_id);
+
+        $featuredMediaFile = $location->mediaFiles()
+            ->wherePivot('is_featured', true)
+            ->latest()
+            ->first();
+        if ($featuredMediaFile) {
+            // Check if $featuredMediaFile is not null
+            $featuredMediaFile->url = $featuredMediaFile->getUrl();
+        }
+
+        // Retrieve all media for the location
+        $mediaFiles = $location->mediaFiles()->orderBy('display_order', 'ASC')->get();
+
+        // Iterate through media files and set URLs
+        $mediaFiles->each(function ($mediaItem) {
+            $mediaItem->url = $mediaItem->getUrl();
+        });
+
+        $attachmentIDs = $mediaFiles->map->id;
+
+        return [
+            'featuredMediaFile' => $featuredMediaFile,
+            'mediaFiles' => $mediaFiles,
+            'attachmentIDs' => $attachmentIDs,
+        ];
+    }
+
+    public function featuredUpdate($location_id, $media_id)
+    {
+        $location = Locations::findOrFail($location_id);
+
+        $mediaIds = $location->mediaFiles()->pluck('media_id')->toArray();
+
+        foreach ($mediaIds as $mediaId) {
+            $location->mediaFiles()->updateExistingPivot($mediaId, ['is_featured' => false]);
+        }
+
+        $response = $location->mediaFiles()->updateExistingPivot($media_id, ['is_featured' => true]);
+
+        return $response;
+    }
+
+    public function addOrRemoveMedia($location_id, $media_id)
+    {
+        $location = Locations::findOrFail($location_id);
+
+        $existingMedia = $location->mediaFiles()->find($media_id);
+
+        if ($existingMedia) {
+            // The media_id is already attached, so detach it
+            $response = $location->mediaFiles()->detach($media_id, ['model_type' => get_class($location)]);
+            return 'removed';
+        } else {
+            // The media_id is not attached, so attach it
+            $response = $location->mediaFiles()->attach($media_id, ['model_type' => get_class($location)]);
+            return 'attached';
+        }
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
     public function media($id)
     {
+        // TEST
         $ids = [8,9,10];
         
         // $mediaFiles = MediaFile::find($ids);

@@ -41,11 +41,55 @@ Route::get('/wp', function () {
 //     return view('dashboard');
 // });
 
-Route::get('/location/{id}/media', [LocationsController::class, 'media'])->name('location.media');
-Route::get('/property/{id}/media', [PropertiesController::class, 'media'])->name('property.media');
-Route::get('/api/property/{id}/media', [PropertiesController::class, 'media'])->name('api.property.media');
-Route::get('/api/property/{property_id}/image-update-featured/{media_id}', [PropertiesController::class, 'updateIsFeatured'])->name('api.property.media.featured');
-Route::get('/api/property/{property_id}/media-add-remove/{media_id}', [PropertiesController::class, 'addRemoveMedia'])->name('api.property.media.update');
+// /api/service/{service_id}/media/all
+// /api/service/{service_id}/media/featured-update/{media_id}
+// /api/service/{service_id}/media/add-remove/{media_id}
+
+Route::prefix('/api/service/{service_id}/media')->name('api.service.media.')->group(function () {
+    Route::get('/all', [ServicesController::class, 'getAllMedia'])->name('index');
+    Route::get('/featured-update/{media_id}', [ServicesController::class, 'featuredUpdate'])->name('featured-update');
+    Route::get('/add-remove/{media_id}', [ServicesController::class, 'addOrRemoveMedia'])->name('add-remove');
+});
+
+
+Route::prefix('/api/location/{location_id}/media')->name('api.location.media.')->group(function () {
+    Route::get('/all', [LocationsController::class, 'getAllMedia'])->name('index');
+    Route::get('/featured-update/{media_id}', [LocationsController::class, 'featuredUpdate'])->name('featured-update');
+    Route::get('/add-remove/{media_id}', [LocationsController::class, 'addOrRemoveMedia'])->name('add-remove');
+});
+
+
+Route::prefix('/api/lineitem/{line_item_id}/media')->name('api.lineitem.media.')->group(function () {
+    Route::get('/all', [LineitemsController::class, 'getAllMedia'])->name('index');
+    Route::get('/featured-update/{media_id}', [LineitemsController::class, 'featuredUpdate'])->name('featured-update');
+    Route::get('/add-remove/{media_id}', [LineitemsController::class, 'addOrRemoveMedia'])->name('add-remove');
+});
+
+
+Route::prefix('/api/feature/{feature_id}/media')->name('api.feature.media.')->group(function () {
+    Route::get('/all', [FeaturesController::class, 'getAllMedia'])->name('index');
+    Route::get('/featured-update/{media_id}', [FeaturesController::class, 'featuredUpdate'])->name('featured-update');
+    Route::get('/add-remove/{media_id}', [FeaturesController::class, 'addOrRemoveMedia'])->name('add-remove');
+});
+
+
+Route::prefix('/api/amenity/{amenity_id}/media')->name('api.amenity.media.')->group(function () {
+    Route::get('/all', [AmenitiesController::class, 'getAllMedia'])->name('index');
+    Route::get('/featured-update/{media_id}', [AmenitiesController::class, 'featuredUpdate'])->name('featured-update');
+    Route::get('/add-remove/{media_id}', [AmenitiesController::class, 'addOrRemoveMedia'])->name('add-remove');
+});
+
+Route::prefix('/api/propertytype/{propertytype_id}/media')->name('api.propertytype.media.')->group(function () {
+    Route::get('/all', [PropertyTypesController::class, 'getAllMedia'])->name('index');
+    Route::get('/featured-update/{media_id}', [PropertyTypesController::class, 'featuredUpdate'])->name('featured-update');
+    Route::get('/add-remove/{media_id}', [PropertyTypesController::class, 'addOrRemoveMedia'])->name('add-remove');
+});
+
+Route::prefix('/api/property/{property_id}/media')->name('api.property.media.')->group(function () {
+    Route::get('/all', [PropertiesController::class, 'getAllMedia'])->name('index');
+    Route::get('/featured-update/{media_id}', [PropertiesController::class, 'featuredUpdate'])->name('featured-update');
+    Route::get('/add-remove/{media_id}', [PropertiesController::class, 'addOrRemoveMedia'])->name('add-remove');
+});
 
 
 Route::get('/api/media', [MediaController::class, 'index'])->name('media.index');
